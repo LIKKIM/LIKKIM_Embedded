@@ -7,12 +7,12 @@ CC = $(ROOTDIR)arm-none-linux-gnueabihf-gcc
 AR = $(ROOTDIR)arm-none-linux-gnueabihf-ar
 RANLIB = $(ROOTDIR)arm-none-linux-gnueabihf-ranlib
 
-KLKKLM_DIR = KLKKLM
+LIKKIM_DIR = LIKKIM
 LVGL_DIR_NAME ?= lvgl
 LVGL_DIR ?= ${shell pwd}
 CFLAGS ?= -O3 -g0 -I$(LVGL_DIR)/ -Wall -Wshadow -Wundef -Wmissing-prototypes -Wno-discarded-qualifiers -Wall -Wextra -Wno-unused-function -Wno-error=strict-prototypes -Wpointer-arith -fno-strict-aliasing -Wno-error=cpp -Wuninitialized -Wmaybe-uninitialized -Wno-unused-parameter -Wno-missing-field-initializers -Wtype-limits -Wsizeof-pointer-memaccess -Wno-format-nonliteral -Wno-cast-qual -Wunreachable-code -Wno-switch-default -Wreturn-type -Wmultichar -Wformat-security -Wno-ignored-qualifiers -Wno-error=pedantic -Wno-sign-compare -Wno-error=missing-prototypes -Wdouble-promotion -Wclobbered -Wdeprecated -Wempty-body -Wtype-limits -Wshift-negative-value -Wstack-usage=2048 -Wno-unused-value -Wno-unused-parameter -Wno-missing-field-initializers -Wuninitialized -Wmaybe-uninitialized -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -Wtype-limits -Wsizeof-pointer-memaccess -Wno-format-nonliteral -Wpointer-arith -Wno-cast-qual -Wmissing-prototypes -Wunreachable-code -Wno-switch-default -Wreturn-type -Wmultichar -Wno-discarded-qualifiers -Wformat-security -Wno-ignored-qualifiers -Wno-sign-compare
-CFLAGS += -I$(KLKKLM_DIR)/Hardware -I$(KLKKLM_DIR)/algo 
-LD_DIR = -L$(KLKKLM_DIR) -L$(KLKKLM_DIR)/algo/
+CFLAGS += -I$(LIKKIM_DIR)/Hardware -I$(LIKKIM_DIR)/algo 
+LD_DIR = -L$(LIKKIM_DIR) -L$(LIKKIM_DIR)/algo/
 LDFLAGS ?= $(LD_DIR) -lm -lpthread -lusart_program -lwallet_algo -lnetwork
 BIN = lvgl_exec
 
@@ -38,7 +38,7 @@ OBJS = $(AOBJS) $(COBJS)
 
 ## MAINOBJ -> OBJFILES
 all:
-	make -C KLKKLM/ KLKKLM_ALL
+	make -C LIKKIM/ LIKKIM_ALL
 	make LVGL_ALL -j4
 	@mkdir -p build
 	@mv $(BIN) build
@@ -52,6 +52,6 @@ LVGL_ALL: $(AOBJS) $(COBJS) $(MAINOBJ)
 
 clean: 
 	rm -f build/$(BIN) $(AOBJS) $(COBJS) $(MAINOBJ)
-	make -C KLKKLM/ clean
+	make -C LIKKIM/ clean
 
 export CC AR RANLIB

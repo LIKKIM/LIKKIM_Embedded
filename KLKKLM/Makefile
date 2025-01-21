@@ -8,7 +8,7 @@ SRCS = Hardware/usart1.c Hardware/CalControlPara.c Hardware/algo_data_comm.c
 OBJS = $(SRCS:.c=.o)
 
 # 默认规则
-KLKKLM_ALL: $(TARGET)
+LIKKIM_ALL: $(TARGET)
 
 # 生成目标可执行文件
 $(TARGET): $(OBJS) ./algo/libwallet_algo.a ./algo/libnetwork.a
