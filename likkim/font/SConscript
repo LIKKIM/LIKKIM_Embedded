@@ -1,0 +1,17 @@
+from building import *
+import rtconfig
+
+# get current dir path
+cwd = GetCurrentDir()
+
+# init src and inc vars
+src = []
+inc = [cwd]
+group =[]
+
+# add LittlevGL common include
+
+src = src + Glob('*.c')
+group = DefineGroup('solution_application', src, depend = [''], CPPPATH = inc)
+
+Return('group')

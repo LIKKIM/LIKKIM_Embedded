@@ -1,0 +1,21 @@
+{
+    "files.associations": {
+        "fbdev.h": "c",
+        "lvgl.h": "c",
+        "lv_extra.h": "c",
+        "lv_hal.h": "c",
+        "startup_quick_start.h": "c",
+        "calcontrolpara.h": "c",
+        "view_addr_main.h": "c",
+        "usart1.h": "c",
+        "lib.h": "c",
+        "gui_comm.h": "c",
+        "algo_data_comm.h": "c",
+        "gui_data_comm.h": "c",
+        "startup_recovery.h": "c",
+        "view_transaction_waiting.h": "c",
+        "view_ready_waiting.h": "c",
+        "startup_screen.h": "c",
+        "fb.h": "c"
+    }
+}
