@@ -1,0 +1,7 @@
+/* Generated automatically. */
+static const char configuration_arguments[] = "/data/jenkins/workspace/GNU-toolchain/arm-10-3/src/gcc/configure --target=arm-none-linux-gnueabihf --prefix= --with-sysroot=/arm-none-linux-gnueabihf/libc --with-build-sysroot=/data/jenkins/workspace/GNU-toolchain/arm-10-3/build-mingw-arm-none-linux-gnueabihf/install//arm-none-linux-gnueabihf/libc --with-bugurl=https://bugs.linaro.org/ --enable-shared --disable-libatomic --without-cloog --without-isl --disable-libssp --disable-libgomp --disable-libmudflap --disable-libquadmath --enable-checking=yes --enable-languages=c --with-gmp=/data/jenkins/workspace/GNU-toolchain/arm-10-3/build-mingw-arm-none-linux-gnueabihf/host-tools --with-mpfr=/data/jenkins/workspace/GNU-toolchain/arm-10-3/build-mingw-arm-none-linux-gnueabihf/host-tools --with-mpc=/data/jenkins/workspace/GNU-toolchain/arm-10-3/build-mingw-arm-none-linux-gnueabihf/host-tools --with-arch=armv7-a --with-fpu=neon --with-float=hard --with-mode=thumb --with-arch=armv7-a --with-libiconv-prefix=/data/jenkins/workspace/GNU-toolchain/arm-10-3/build-mingw-arm-none-linux-gnueabihf/host-tools --with-pkgversion='GNU Toolchain for the A-profile Architecture 10.3-2021.07 (arm-10.29)'";
+static const char thread_model[] = "posix";
+
+static const struct {
+  const char *name, *value;
+} configure_default_options[] = { { "cpu", "arm10e" }, { "arch", "armv7-a" }, { "float", "hard" }, { "mode", "thumb" }, { "fpu", "neon" }, { "tls", "gnu" } };
