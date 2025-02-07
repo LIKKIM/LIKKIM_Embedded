@@ -167,7 +167,7 @@ void *thread_func2(void *arg) {
         
         sleep(2);
         SYNC_INTERVAL ++;
-        if(SYNC_INTERVAL >=2)
+        if(SYNC_INTERVAL >=1)
         {
             SYNC_INTERVAL=0;
             savedata();

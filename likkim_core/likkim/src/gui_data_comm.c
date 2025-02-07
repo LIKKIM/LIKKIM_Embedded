@@ -1225,7 +1225,7 @@ void SaveWalletToEmmc(gui_data_t *data) {
     }
 
     fclose(file);
-    printf("Data successfully saved to %s\n", DATA_FILE_INIT);
+    // printf("Data successfully saved to %s\n", DATA_FILE_INIT);
 }
 
 // 读取eMMC中的数据
@@ -1264,7 +1264,7 @@ void ReadWalletForEmmc(gui_data_t *data) {
     fread(&data->pin_wrong_times, sizeof(data->pin_wrong_times), 1, file);
 
     fclose(file);
-    printf("Data successfully read from %s\n", DATA_FILE_INIT);
+    // printf("Data successfully read from %s\n", DATA_FILE_INIT);
 }
 
 
