@@ -205,7 +205,7 @@ void PINCodeWalletSend(void)
     else{
         send_serial_data("PIN:%04d,Y\r\n",PIN_number);
         PINFlag =1;
-        adressAllSend();
+        // adressAllSend();
     }
 
 
