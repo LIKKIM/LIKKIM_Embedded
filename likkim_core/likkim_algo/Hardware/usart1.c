@@ -175,7 +175,10 @@ void parse_command(char *command) {
             printf("Parsed sign data:\nCoin: %s\nPath: %s\nSign Data: %s\n", 
                    parsed.coin, parsed.path, parsed.sign_data);
             bch_sign = sign_tx( parsed.coin,parsed.sign_data, infoWallet->seed, infoWallet->seed_len, parsed.path);
-             send_serial_data("signed_data:%s,%s\n",parsed.coin, bch_sign);
+            // 使用 memcpy 来复制字符串
+            memcpy(parsed.bch_sign, bch_sign,strlen(bch_sign)+1); // 留出空间给 '\0'
+
+             send_serial_data("signed_data:%s,%s\n",parsed.coin,  parsed.bch_sign);
             //  send_serial_data("signed_data:%s\n",parsed.coin);
             WalletSignFlag =1;
         }
@@ -322,6 +325,8 @@ void send_serial_data(const char *format, ...) {
         printf(" %s\n", buffer);
     }
 }
+
+
 
 
 

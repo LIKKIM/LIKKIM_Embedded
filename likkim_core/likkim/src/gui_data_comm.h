@@ -49,7 +49,7 @@ typedef struct
 	char language[32];		//保存的多语言字符串
 	language_type_t language_type;	//保存的多语言类型
 
-	bool word_set_complete;	//助记词设置完成
+	bool  word_set_complete;	//助记词设置完成
 	uint8_t word_num;		//设置的助记词数量
 	char word[24][50];		//保存的助记词内容
 

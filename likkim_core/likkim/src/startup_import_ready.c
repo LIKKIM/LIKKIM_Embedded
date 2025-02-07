@@ -17,8 +17,8 @@ static void continue_cb(lv_event_t* e)
     if (LV_EVENT_SHORT_CLICKED == event)
     {
     	gui_comm_do_shake(1);
-        gui_data_sueess(1);
-        
+        wallet_Input_word(1);/*导入钱包标志位赋值*/
+        gui_data_sueess(1);//錢包生成成功標志位
     	startup_import_ready_stop();
 		menu_main_start();
     }

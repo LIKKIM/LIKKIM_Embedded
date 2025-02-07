@@ -59,7 +59,7 @@ static void startup_recovery_word_btn_handler(lv_event_t* e)
 
     if (LV_EVENT_SHORT_CLICKED == event)
     {
-        printf("%s\n", (char *)e->user_data);
+        // printf("%s\n", (char *)e->user_data);
     }
 }
 
@@ -111,7 +111,6 @@ static void startup_recovery_bg_cont(lv_obj_t* parent)
         lv_obj_t* label = lv_label_create(img_btn);
 		lv_obj_set_style_text_color(label, lv_color_hex(0xffffff), 0);
 		lv_obj_set_style_text_font(label, &font_24, 0);
-        printf("startup_recovery:%d. %s", i + 1,gui_data_get_word(i));
         lv_label_set_text_fmt(label, "%d. %s", i + 1,gui_data_get_word(i));
         lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
     }
@@ -120,7 +119,7 @@ static void startup_recovery_bg_cont(lv_obj_t* parent)
 
 void startup_recovery_start(void)
 {
-    printf("%s\n", __func__);
+    // printf("%s\n", __func__);
     gui_algo_data_set_pagelocation("startup_recovery",0);
     p_startup_recovery = (startup_recovery_t*)lv_mem_alloc(sizeof(startup_recovery_t));
     LV_ASSERT(p_startup_recovery);

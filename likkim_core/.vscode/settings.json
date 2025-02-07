@@ -16,6 +16,11 @@
         "view_transaction_waiting.h": "c",
         "view_ready_waiting.h": "c",
         "startup_screen.h": "c",
-        "fb.h": "c"
+        "fb.h": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c",
+        "startup_import_word.h": "c",
+        "settings_erase.h": "c"
     }
 }

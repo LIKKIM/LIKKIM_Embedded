@@ -61,7 +61,7 @@ char input[256];
 // 全局变量声明
 uint8_t adressFlag_read = 0;            // 用于读取地址标志
 
-#define DATA_FILE_PATH "/data/wallet_data.bin"
+#define DATA_FILE_PATH "/home/root/wallet_path.bin"
 
 // 使用标准库的随机数生成
 uint32_t rng_get_random(void) {
@@ -205,8 +205,9 @@ void PINCodeWalletSend(void)
     else{
         send_serial_data("PIN:%04d,Y\r\n",PIN_number);
         PINFlag =1;
-        // adressAllSend();
+        adressAllSend();
     }
+
 
 }
 
@@ -238,7 +239,7 @@ void SaveAddressPathsToEmmc(void) {
 void SavePathsToEmmc( char paths[][50], size_t num_paths) {
     FILE *file = fopen(DATA_FILE_PATH, "wb");
     if (!file) {
-        perror("Failed to open file for writing");
+        perror("Failed to open file for writing SavePathsToEmmc");
         return;
     }
 
@@ -254,6 +255,12 @@ void SavePathsToEmmc( char paths[][50], size_t num_paths) {
         printf("Saving path[%zu]: %s (length: %zu)\n", i, paths[i], path_len);
     }
 
+    // 使用 fsync 确保数据写入磁盘
+    if (fsync(fileno(file)) == -1) {
+        perror("fsync failed");
+    }
+
+
     fclose(file);
     printf("Paths successfully saved to %s\n", DATA_FILE_PATH);
 }
@@ -261,7 +268,7 @@ void SavePathsToEmmc( char paths[][50], size_t num_paths) {
 void ReadPathsFromEmmc(void) {
     FILE *file = fopen(DATA_FILE_PATH, "rb");
     if (!file) {
-        perror("Failed to open file for reading");
+        perror("Failed to open file for reading ReadPathsFromEmmc");
         return;
     }
 
