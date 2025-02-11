@@ -5,6 +5,12 @@
 #include "gui_comm.h"
 #include "gui_data_comm.h"
 #include "lib.h"
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 static const char* const wordlist[] = {
     "abandon",  "ability",  "able",     "about",    "above",    "absent",
@@ -352,12 +358,64 @@ static const char* const wordlist[] = {
 };
 static gui_data_t *p_gui_data = NULL;
 static gui_algo_data_t  *p_gui_algo_data=NULL;
-#define DATA_FILE_INIT "/home/debian/wallet_data.bin"
+#define DATA_FILE_INIT "/mnt/emmc/data/wallet_data.sh"  // 存储路径修改为 /mnt/emmc/data
 extern void general_lock_start(void);
 extern void startup_screen_start(app_index_t app_index);
-
+extern void * data_get_transaction_format(void);
 uint8_t walletInput =0;
 WalletInfo *infoWallet;
+
+#define GPIO_PIN 0
+
+// 导出 GPIO 引脚
+void export_gpio(int pin) {
+    FILE *f = fopen("/sys/class/gpio/export", "w");
+    if (f == NULL) {
+        perror("Unable to open export file");
+        exit(1);
+    }
+    fprintf(f, "%d", pin);
+    fclose(f);
+}
+
+
+// 设置 GPIO 引脚的方向
+void set_gpio_direction(int pin, const char *direction) {
+    char path[50];
+    snprintf(path, sizeof(path), "/sys/class/gpio/gpio%d/direction", pin);
+    FILE *f = fopen(path, "w");
+    if (f == NULL) {
+        perror("Unable to open direction file");
+        exit(1);
+    }
+    fprintf(f, "%s", direction);
+    fclose(f);
+}
+
+// 设置 GPIO 引脚的值
+void set_gpio_value(int pin, int value) {
+    char path[50];
+    snprintf(path, sizeof(path), "/sys/class/gpio/gpio%d/value", pin);
+    FILE *f = fopen(path, "w");
+    if (f == NULL) {
+        perror("Unable to open value file");
+        exit(1);
+    }
+    fprintf(f, "%d", value);
+    fclose(f);
+}
+
+// 清理 GPIO 引脚
+void unexport_gpio(int pin) {
+    FILE *f = fopen("/sys/class/gpio/unexport", "w");
+    if (f == NULL) {
+        perror("Unable to open unexport file");
+        exit(1);
+    }
+    fprintf(f, "%d", pin);
+    fclose(f);
+}
+
 uint16_t get_rand_num(uint16_t max)
 {
 	srand(lv_tick_get() + p_gui_data->last_rand);
@@ -507,7 +565,7 @@ uint8_t gui_algo_data_get_pagelocationsave(char *state) {
         else if (0 == strcmp("startup_recovery", p_gui_algo_data->pagt_location_save))
             startup_recovery_start();
         else if (0 == strcmp("startup_screen", p_gui_algo_data->pagt_location_save))
-            startup_screen_start(APP_STARTUP_IMPORT_WALLET);
+            startup_screen_start(APP_GENERAL);
         else if (0 == strcmp("startup_set_pin", p_gui_algo_data->pagt_location_save))
             startup_set_pin_start();
         else if (0 == strcmp("startup_verification", p_gui_algo_data->pagt_location_save))
@@ -634,13 +692,7 @@ uint8_t gui_algo_data_get_pagelocationsave(char *state) {
 //导入钱包
 uint8_t import_wallet_init(void)
 {
-    // 为 WalletInfo 分配内存并初始化
-    infoWallet = (WalletInfo *)malloc(sizeof(WalletInfo));
-    if (infoWallet == NULL) {
-        perror("Failed to allocate memory for WalletInfo");
-        return -1;
-    }
-    memset(infoWallet, 0, sizeof(WalletInfo)); // 初始化为 0
+
     for(int i=0;i< p_gui_data->word_num;i++)
     {
         printf("p_gui_data->word: %s\r\n", p_gui_data->word[i]);
@@ -668,9 +720,6 @@ uint8_t import_wallet_init(void)
     // 释放 wallet_data 内存，如果是通过 malloc 分配的
     free(wallet_data);
 
-    // 打印钱包是否有效
-    printf("infoWallet->is_valid: %d\r\n", infoWallet->is_valid);
-    printf("infoWallet->mnemonic: %s\r\n", infoWallet->mnemonic);
 
     return infoWallet->is_valid;
 }
@@ -733,13 +782,13 @@ void *gui_data_get_transaction_fee_payer(void)
 /*获取fomat的内容*/
 void *gui_data_get_transaction_format(void)
 {
-	return "format_info format_info format_info format_info";
+	return  data_get_transaction_format();
 }
 
 /*获取hash的内容*/
 void *gui_data_get_transaction_hash(void)
 {
-	return "hash_info hash_info hash_info hash_info hash_info";
+	return data_get_transaction_format();
 }
 
 
@@ -1063,6 +1112,25 @@ void gui_data_set_pin_lock_time(uint32_t lock_time)
 /*触发震动，需要调用震动接口*/
 void gui_comm_do_shake(uint8_t count)
 {
+        // 导出 GPIO 引脚 0
+    export_gpio(GPIO_PIN);
+
+    // 设置 GPIO 引脚 0 为输出模式
+    set_gpio_direction(GPIO_PIN, "out");
+
+    // 设置 GPIO 引脚 0 为高电平
+    set_gpio_value(GPIO_PIN, 1);
+    printf("GPIO%d set to HIGH\n", GPIO_PIN);
+
+    // 延时 3 秒
+    usleep(30000);
+
+    // 设置 GPIO 引脚 0 为低电平
+    set_gpio_value(GPIO_PIN, 0);
+    printf("GPIO%d set to LOW\n", GPIO_PIN);
+
+    // 清理 GPIO 引脚 0
+    unexport_gpio(GPIO_PIN);
 	
 }
 
@@ -1086,13 +1154,13 @@ void gui_data_sueess(uint8_t count){
     {
 
          p_gui_data->word_set_complete =true;
-         printf("p_gui_data->word_set_complete = %s\n", p_gui_data->word_set_complete ? "true" : "false");
+         printf("p_gui_data->word_set_complete = %s\n", p_gui_data->word_set_complete ?"true":"false");
 
     }
     else if(count ==0)
     {
          p_gui_data->word_set_complete =false;
-         printf("p_gui_data->word_set_complete = %s\n", p_gui_data->word_set_complete ? "true" : "false");
+         printf("p_gui_data->word_set_complete = %s\n", p_gui_data->word_set_complete?"true":"false");
 
     }
     else
@@ -1109,129 +1177,96 @@ void savedata(void)
     SaveWalletToEmmc(p_gui_data);
 }
 
+// 保存数据到eMMC
 void SaveWalletToEmmc(gui_data_t *data) {
+    // 确保目标目录存在
+    if (access("/mnt/emmc/data", F_OK) == -1) {
+        if (mkdir("/mnt/emmc/data", 0700) == -1) {
+            perror("Failed to create directory");
+            return;
+        }
+    }
+
     FILE *file = fopen(DATA_FILE_INIT, "wb");
     if (!file) {
-        perror("Failed to open file for writing");
-         mkdir(DATA_FILE_INIT, 0700); // 创建目录，如果没有的话
+        perror("Failed to open file for writing SaveWalletToEmmc");
         return;
     }
 
-    // 写入 last_rand
+    // 写入数据
+    
     fwrite(&data->last_rand, sizeof(data->last_rand), 1, file);
-
-    // 写入 bg_src_id
     fwrite(&data->bg_src_id, sizeof(data->bg_src_id), 1, file);
-
-    // 写入 bg_src（假设是一个指针，先不保存实际图像数据，可以考虑存储图像文件路径）
     fwrite(&data->bg_src, sizeof(data->bg_src), 1, file);
-
-    // 写入 pin
     fwrite(data->pin, sizeof(data->pin), 1, file);
-
-    // 写入 language
     fwrite(data->language, sizeof(data->language), 1, file);
-
-    // 写入 language_type
-    fwrite(&data->language_type, sizeof(data->language_type), 1, file);
-
-    // 写入 word_set_complete
     fwrite(&data->word_set_complete, sizeof(data->word_set_complete), 1, file);
-
-    // 写入 word_num
+    fwrite(&data->language_type, sizeof(data->language_type), 1, file);
     fwrite(&data->word_num, sizeof(data->word_num), 1, file);
 
-    // 写入 word
     for (int i = 0; i < data->word_num; i++) {
         fwrite(data->word[i], sizeof(data->word[i]), 1, file);
     }
 
-    // 写入 lock_time
     fwrite(&data->lock_time, sizeof(data->lock_time), 1, file);
-
-    // 写入 shutdown_time
     fwrite(&data->shutdown_time, sizeof(data->shutdown_time), 1, file);
-
-    // 写入 fingerprint_num
     fwrite(&data->fingerprint_num, sizeof(data->fingerprint_num), 1, file);
-
-    // 写入 fingerprint_process
     fwrite(&data->fingerprint_process, sizeof(data->fingerprint_process), 1, file);
-
-    // 写入 fingerprint_remove_id
     fwrite(&data->fingerprint_remove_id, sizeof(data->fingerprint_remove_id), 1, file);
-
-    // 写入 power_level
     fwrite(&data->power_level, sizeof(data->power_level), 1, file);
-
-    // 写入 power_charge
     fwrite(&data->power_charge, sizeof(data->power_charge), 1, file);
-
-    // 写入 ble_connect
     fwrite(&data->ble_connect, sizeof(data->ble_connect), 1, file);
-
-    // 写入 first_poweron
     fwrite(&data->first_poweron, sizeof(data->first_poweron), 1, file);
-
-    // 写入 pin_wrong_times
     fwrite(&data->pin_wrong_times, sizeof(data->pin_wrong_times), 1, file);
+
+    // 使用 fsync 确保数据写入磁盘
+    if (fsync(fileno(file)) == -1) {
+        perror("fsync failed");
+    }
 
     fclose(file);
     // printf("Data successfully saved to %s\n", DATA_FILE_INIT);
 }
 
-
+// 读取eMMC中的数据
 void ReadWalletForEmmc(gui_data_t *data) {
     FILE *file = fopen(DATA_FILE_INIT, "rb");
     if (!file) {
-        data->word_set_complete =0;
-        perror("Failed to open file for reading");
+        data->word_set_complete = false;
+        perror("Failed to open file for reading ReadWalletForEmmc");
         return;
     }
 
-    // 读取 last_rand
+    // 读取数据
+    
     fread(&data->last_rand, sizeof(data->last_rand), 1, file);
-    // 读取 bg_src_id
     fread(&data->bg_src_id, sizeof(data->bg_src_id), 1, file);
-    // 读取 bg_src（假设是一个指针，实际的背景资源可以存储在其它地方）
     fread(&data->bg_src, sizeof(data->bg_src), 1, file);
-    // 读取 pin
     fread(data->pin, sizeof(data->pin), 1, file);
-    // 读取 language
     fread(data->language, sizeof(data->language), 1, file);
-    // 读取 language_type
-    fread(&data->language_type, sizeof(data->language_type), 1, file);
-    // 读取 word_set_complete
     fread(&data->word_set_complete, sizeof(data->word_set_complete), 1, file);
-    // 读取 word_num
+    fread(&data->language_type, sizeof(data->language_type), 1, file);
     fread(&data->word_num, sizeof(data->word_num), 1, file);
-    // 读取 word
+
     for (int i = 0; i < data->word_num; i++) {
         fread(data->word[i], sizeof(data->word[i]), 1, file);
     }
-    // 读取 lock_time
+
     fread(&data->lock_time, sizeof(data->lock_time), 1, file);
-    // 读取 shutdown_time
     fread(&data->shutdown_time, sizeof(data->shutdown_time), 1, file);
-    // 读取 fingerprint_num
     fread(&data->fingerprint_num, sizeof(data->fingerprint_num), 1, file);
-    // 读取 fingerprint_process
     fread(&data->fingerprint_process, sizeof(data->fingerprint_process), 1, file);
-    // 读取 fingerprint_remove_id
     fread(&data->fingerprint_remove_id, sizeof(data->fingerprint_remove_id), 1, file);
-    // 读取 power_level
     fread(&data->power_level, sizeof(data->power_level), 1, file);
-    // 读取 power_charge
     fread(&data->power_charge, sizeof(data->power_charge), 1, file);
-    // 读取 ble_connect
     fread(&data->ble_connect, sizeof(data->ble_connect), 1, file);
-    // 读取 first_poweron
     fread(&data->first_poweron, sizeof(data->first_poweron), 1, file);
-    // 读取 pin_wrong_times
     fread(&data->pin_wrong_times, sizeof(data->pin_wrong_times), 1, file);
+
     fclose(file);
     // printf("Data successfully read from %s\n", DATA_FILE_INIT);
 }
+
 
 void word_set_completeture(void)
 {
@@ -1247,15 +1282,22 @@ void word_set_completeture(void)
 }
 void gui_data_init(void)
 {
+        // 为 WalletInfo 分配内存并初始化
+    infoWallet = (WalletInfo *)malloc(sizeof(WalletInfo));
+    if (infoWallet == NULL) {
+        perror("Failed to allocate memory for WalletInfo");
+        return -1;
+    }
+    memset(infoWallet, 0, sizeof(WalletInfo)); // 初始化为 0
+    
     p_gui_data = (gui_data_t*)lv_mem_alloc(sizeof(gui_data_t));
      p_gui_algo_data = (gui_algo_data_t *)malloc(sizeof(gui_algo_data_t));
     lv_memset(p_gui_data, 0, sizeof(gui_data_t));
     ReadWalletForEmmc(p_gui_data);
     strcpy(p_gui_algo_data->page_location, "startup_screen");
     strcpy(p_gui_algo_data->pagt_location_save, "startup_screen");
-    
-      printf("p_gui_data->word_set_complete = %s\n", p_gui_data->word_set_complete ? "true" : "false");
-      printf("p_gui_data->bg_src_id:%d\r\n",p_gui_data->bg_src_id);
+    printf("p_gui_data->word_set_complete = %s\n", p_gui_data->word_set_complete ?"true":"false");
+    printf("p_gui_data->bg_src_id:%d\r\n",p_gui_data->bg_src_id);
 
     if(p_gui_data->word_set_complete ==true){
         
@@ -1266,7 +1308,7 @@ void gui_data_init(void)
         startup_screen_start(APP_GENERAL);
 
     }
-    else{
+    else if (p_gui_data->word_set_complete ==false){
         gui_data_set_bg_src_id(5);
         gui_data_set_language("English");
         gui_data_set_pin("666666");

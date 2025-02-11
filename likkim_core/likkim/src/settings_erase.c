@@ -54,6 +54,9 @@ static void img_check2_cb(lv_event_t* e)
     }
 }
 
+
+
+
 static void cancel_cb(lv_event_t* e)
 {
     lv_event_code_t event = lv_event_get_code(e);
@@ -149,6 +152,9 @@ void settings_erase_start(void)
 
     p_settings_erase->bg_cont = gui_comm_draw_bg();
     settings_erase_bg_cont(p_settings_erase->bg_cont);
+
+    // 初始化时将滑块设置为不可滑动
+    lv_obj_add_flag(p_settings_erase->slider, LV_OBJ_FLAG_CLICKABLE);
 }
 
  void settings_erase_stop(void)

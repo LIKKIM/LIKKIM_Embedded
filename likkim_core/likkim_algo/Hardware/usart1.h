@@ -17,7 +17,7 @@
 #include "lib.h"
 #include "CalControlPara.h"
 
-#define SERIAL_PORT "/dev/ttySTM0"
+#define SERIAL_PORT "/dev/ttySTM2"
 
 #define CMD_BUF_SIZE 1024
 #define READ_BUF_SIZE 256
@@ -27,6 +27,7 @@ typedef struct {
     char coin[100];       // 币种
     char path[200];       // 币种路径
     char sign_data[CMD_BUF_SIZE];  // sign数据
+    char bch_sign[CMD_BUF_SIZE];//輸出數據
 } ParsedData;
 
 typedef struct {
@@ -43,4 +44,5 @@ void *async_io_init(void *arg);
 int setup_serial_port(int fd);
 // void send_serial_data(const char *data);
 void send_serial_data (const char *format, ...);
+
 #endif

@@ -28,7 +28,7 @@
 #include "algo_data_comm.h"
 #include "startup_ready_check.h"
 #include <linux/input.h>
-
+#include "startup_import_word.h"
 
 // 宏定义
 #define DISP_BUF_SIZE (800  * 480)
@@ -81,7 +81,7 @@ void *thread_func1(void *arg) {
     while(1) {
         GetRandomPIN();
         lv_timer_handler();
-        savedata();//存储数据
+        
         usleep(5000);
     }
 
@@ -96,7 +96,9 @@ extern uint8_t WalletSignFlag;
 extern void startup_set_pin_start(app_index_t app_index);
 extern ParsedData parsed;
 extern int fd;  // 声明串口文件描述符.
+extern ParsedData parsed; //签名数据
 extern char **randMneonics ;
+uint8_t SYNC_INTERVAL =0;
 // 线程 2s
 void *thread_func2(void *arg) {
      
@@ -111,7 +113,7 @@ void *thread_func2(void *arg) {
         {
              walletCreate =0;
             //  startup_set_pin_start(APP_STARTUP_CREATE_WALLET);
-            gui_algo_data_set_pagelocation(gui_algo_data_get_pagelocation,1);
+            gui_algo_data_set_pagelocation(gui_algo_data_get_pagelocation(),1);
             gui_algo_data_get_pagelocationsave("stop");
             startup_ready_check_start();
         }
@@ -126,14 +128,18 @@ void *thread_func2(void *arg) {
 
         if(wallet_Input_get()==1){        //创建导入钱包标志位
             wallet_Input_word(0);
+            if(import_wallet_init()==1)
+            printf("import_wallet_init:succeed\r\n");
+            else
+                printf("import_wallet_init:fail\r\n");
+             
             // startup_import_abort_start();
 
         }
         else if (wallet_Input_get()==3){
             wallet_Input_word(0);
-            //   infoWallet = init_wallet_by_mnemonic(mnemonic_read,"");
-            //   if(infoWallet->is_valid)
-            //   printf("input sueess\r\n");
+            // printf("p_startup_import_word->word:%s\r\n",p_startup_import_word->word);
+            
         }
         if(AddressFlag==1)     //显示地址
         {
@@ -160,8 +166,20 @@ void *thread_func2(void *arg) {
         }
         
         sleep(2);
+        SYNC_INTERVAL ++;
+        if(SYNC_INTERVAL >=1)
+        {
+            SYNC_INTERVAL=0;
+            savedata();
+
+        }
     }
     return NULL;
+}
+
+void * data_get_transaction_format(void)
+{
+    return parsed.bch_sign;
 }
 
 // 创建线程
@@ -229,8 +247,6 @@ int main() {
     pthread_t  async_thread;
     pthread_t button_thread;  // 按键检测线程的ID
 
-    
-   
     // 打开串口设备
     fd = open(SERIAL_PORT, O_RDWR | O_NOCTTY | O_NDELAY);
     if (fd == -1) {

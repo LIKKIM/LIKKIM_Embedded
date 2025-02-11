@@ -52,6 +52,7 @@ LVGL_ALL: $(AOBJS) $(COBJS) $(MAINOBJ)
 	@echo "CC $<"
 
 clean: 
+	rm -f build/$(BIN) $(AOBJS) $(COBJS) $(MAINOBJ)
 	rm -f build/*
 	make -C likkim_algo/ clean
 
