@@ -18,9 +18,10 @@ static void continue_cb(lv_event_t* e)
 
     if (LV_EVENT_SHORT_CLICKED == event)
     {
-        view_transaction_main_stop();
+        // view_transaction_main_stop();
+		// gui_algo_data_get_pagelocationsave("stop");
 		printf("view_transaction_confirm_start!!!!!!\r\n");
-		view_transaction_confirm_start();
+		// view_transaction_confirm_start();
     }
 }
 
@@ -31,7 +32,7 @@ static void reject_cb(lv_event_t* e)
     if (LV_EVENT_SHORT_CLICKED == event)
     {
         view_transaction_main_stop();
-		// gui_algo_data_get_pagelocationsave("start");
+		gui_algo_data_get_pagelocationsave("stop");
         settings_security_start();
     }
 }
@@ -82,7 +83,7 @@ static void view_transaction_main_bg_cont(lv_obj_t* parent)
 	lv_label_set_long_mode(label_fee, LV_LABEL_LONG_WRAP);
 	lv_obj_set_width(label_fee, 320);
 	lv_obj_set_pos(label_fee, 40, 88); 
-	set_language_string(label_fee, 24, language_table_fee_payer);
+	set_language_string(label_fee, 24, language_table_receiver);
 	lv_obj_update_layout(label_fee);
 
 	lv_obj_t* label_fee_content = lv_label_create(bg_obj_directions);
@@ -91,7 +92,7 @@ static void view_transaction_main_bg_cont(lv_obj_t* parent)
 	lv_label_set_long_mode(label_fee_content, LV_LABEL_LONG_WRAP);
 	lv_obj_set_width(label_fee_content, 320);
 	lv_obj_set_pos(label_fee_content, 40, 140);
-	lv_label_set_text(label_fee_content, gui_data_get_transaction_fee_payer());
+	lv_label_set_text(label_fee_content, gui_data_get_transaction_fee_receiver());
 	lv_obj_update_layout(label_fee_content);
 	lv_obj_set_size(bg_obj_directions, 400, lv_obj_get_height(label_fee_content) + 140 + 20);
 
@@ -113,7 +114,7 @@ static void view_transaction_main_bg_cont(lv_obj_t* parent)
 	lv_label_set_long_mode(label_more, LV_LABEL_LONG_WRAP);
 	lv_obj_set_width(label_more, 320);
 	lv_obj_set_pos(label_more, 40, 20); 
-	set_language_string(label_more, 24, language_table_more);
+	set_language_string(label_more, 24, language_table_fee);
 	lv_obj_update_layout(label_more);
 
 	lv_obj_t* label_format = lv_label_create(bg_obj_more);
@@ -121,7 +122,7 @@ static void view_transaction_main_bg_cont(lv_obj_t* parent)
 	lv_label_set_long_mode(label_format, LV_LABEL_LONG_WRAP);
 	lv_obj_set_width(label_format, 320);
 	lv_obj_set_pos(label_format, 40, 88); 
-	set_language_string(label_format, 24, language_table_message_hash);
+	set_language_string(label_format, 24, language_table_message_amount);
 	lv_obj_update_layout(label_format);
 
 	lv_obj_t* label_format_content = lv_label_create(bg_obj_more);
@@ -130,7 +131,7 @@ static void view_transaction_main_bg_cont(lv_obj_t* parent)
 	lv_label_set_long_mode(label_format_content, LV_LABEL_LONG_WRAP);
 	lv_obj_set_width(label_format_content, 320);
 	lv_obj_set_pos(label_format_content, 40, 140);
-	lv_label_set_text(label_format_content,gui_data_get_transaction_hash());
+	lv_label_set_text(label_format_content,gui_data_get_transaction_amount());
 	lv_obj_update_layout(label_format_content);
 
 	// lv_obj_t* label_hash = lv_label_create(bg_obj_more);
@@ -138,7 +139,7 @@ static void view_transaction_main_bg_cont(lv_obj_t* parent)
 	// lv_label_set_long_mode(label_hash, LV_LABEL_LONG_WRAP);
 	// lv_obj_set_width(label_hash, 320);
 	// lv_obj_align_to(label_hash, label_format_content, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
-	// set_language_string(label_hash, 24, language_table_message_hash);
+	// set_language_string(label_hash, 24, language_table_message_amount);
 	// lv_obj_update_layout(label_hash);
 
 	// lv_obj_t* label_hash_content = lv_label_create(bg_obj_more);
@@ -147,7 +148,7 @@ static void view_transaction_main_bg_cont(lv_obj_t* parent)
 	// lv_label_set_long_mode(label_hash_content, LV_LABEL_LONG_WRAP);
 	// lv_obj_set_width(label_hash_content, 320);
 	// lv_obj_align_to(label_hash_content, label_hash, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
-	// lv_label_set_text(label_hash_content, gui_data_get_transaction_hash());
+	// lv_label_set_text(label_hash_content, gui_data_get_transaction_amount());
 	// lv_obj_update_layout(label_hash_content);
 
 	lv_obj_set_size(bg_obj_more, 400, label_format_content->coords.y2 + 20);

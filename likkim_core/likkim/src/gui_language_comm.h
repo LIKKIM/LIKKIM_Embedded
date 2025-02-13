@@ -17,9 +17,9 @@ LV_FONT_DECLARE(font_40)
 
 
 extern const char* language_table_screen_never_turn_off[];
-extern const char* language_table_fee_payer[];
+extern const char* language_table_receiver[];
 extern const char* language_table_format[];
-extern const char* language_table_message_hash[];
+extern const char* language_table_message_amount[];
 extern const char* language_table_wallet_ready[];
 extern const char* language_table_warning_reset_device[];
 extern const char* language_table_restore_funds[];
@@ -108,7 +108,7 @@ extern const char* language_table_path[];
 extern const char* language_table_qr_code[];
 extern const char* language_table_view_transaction[];
 extern const char* language_table_directions[];
-extern const char* language_table_more[];
+extern const char* language_table_fee[];
 extern const char* language_table_reject[];
 extern const char* language_table_confirm_transaction[];
 extern const char* language_table_sign_transaction[];

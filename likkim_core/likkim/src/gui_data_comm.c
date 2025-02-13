@@ -361,7 +361,8 @@ static gui_algo_data_t  *p_gui_algo_data=NULL;
 #define DATA_FILE_INIT "/mnt/emmc/data/wallet_data.sh"  // 存储路径修改为 /mnt/emmc/data
 extern void general_lock_start(void);
 extern void startup_screen_start(app_index_t app_index);
-extern void * data_get_transaction_format(void);
+extern void * data_get_transaction_amount(void);
+extern void * gui_get_transaction_fee_receiver(void);
 uint8_t walletInput =0;
 WalletInfo *infoWallet;
 
@@ -773,22 +774,23 @@ void *gui_data_get_address_path(void)
 	return p_gui_algo_data->address_datapath;
 }
 
-/*获取fee_payer的内容*/
-void *gui_data_get_transaction_fee_payer(void)
+/*获取receiver的内容*/
+void *gui_data_get_transaction_fee_receiver(void)
 {
-	return "fee_payer_info fee_payer_info fee_payer_info fee_payer_info fee_payer_info";
+	return gui_get_transaction_fee_receiver();
 }
 
-/*获取fomat的内容*/
-void *gui_data_get_transaction_format(void)
-{
-	return  data_get_transaction_format();
-}
+// /*获取fomat的内容*/
+// void *gui_data_get_transaction_format(void)
+// {
+// 	return  data_get_transaction_amount();
+// }
 
-/*获取hash的内容*/
-void *gui_data_get_transaction_hash(void)
+/*获取amount的内容*/
+void *gui_data_get_transaction_amount(void)
 {
-	return data_get_transaction_format();
+	// return data_get_transaction_amount();
+    return "0.01";
 }
 
 

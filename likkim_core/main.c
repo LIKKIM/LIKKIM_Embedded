@@ -94,9 +94,9 @@ extern uint8_t AddressFlag;
 extern uint8_t PINFlag ;
 extern uint8_t WalletSignFlag;
 extern void startup_set_pin_start(app_index_t app_index);
-extern ParsedData parsed;
 extern int fd;  // 声明串口文件描述符.
 extern ParsedData parsed; //签名数据
+extern signdata sign_data; //签名数据
 extern char **randMneonics ;
 uint8_t SYNC_INTERVAL =0;
 // 线程 2s
@@ -157,10 +157,10 @@ void *thread_func2(void *arg) {
             connect_main_start();
         }
         if(WalletSignFlag ==1)  //签名
-        {
+        {  
             WalletSignFlag =0;
-            gui_algo_data_set_pagelocation(gui_algo_data_get_pagelocation(),1);
-            gui_algo_data_get_pagelocationsave("stop");
+            // gui_algo_data_set_pagelocation(gui_algo_data_get_pagelocation(),1);
+            // gui_algo_data_get_pagelocationsave("stop");
             view_transaction_main_start();
 
         }
@@ -177,10 +177,6 @@ void *thread_func2(void *arg) {
     return NULL;
 }
 
-void * data_get_transaction_format(void)
-{
-    return parsed.bch_sign;
-}
 
 // 创建线程
 int create_thread(pthread_t *thread, void *(*start_routine)(void *), const char *thread_name) {
@@ -314,4 +310,21 @@ uint32_t custom_tick_get(void)
 
     uint32_t time_ms = now_ms - start_ms;
     return time_ms;
+}
+
+
+void * data_get_transaction_amount(void)
+{
+     char str[20]; // 足够大的字符数组来存储浮点数的字符串表示
+      // 使用 sprintf() 将浮点数格式化为字符串
+        sprintf(str, "%.4f",  sign_data.amount);  // 这里保留4位小数，格式化为字符串
+        printf("%s\r\n",str);
+    return str;
+}
+
+
+void * gui_get_transaction_fee_receiver(void)
+{
+    return sign_data.destinationAddress;
+
 }

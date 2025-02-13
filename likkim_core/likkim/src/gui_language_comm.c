@@ -7,28 +7,28 @@
 #include "gui_language_comm.h"
 
 /*123456789qwertyuiopasdfghjkl;zzxcvbnm,.*/
-const char* language_table_fee_payer[] = {
-	"Fee Payer",
-	"费用付款人",
-	"費用付款人",
-	"Payeur des frais",
-	"Pagador de tarifas",
-	"دافع الرسوم",
-	"手数料の支払者",
-	"Плательщик сборов",
-	"수수료 납부자",
-	"Pagador de taxas",
-	"Pagador de taxas",
-	"Payer della tassa",
-	"Gebührenzahler",
-	"शुल्कदाता",
-	"Тарифын төлөгч",
-	"ผู้ชำระค่าธรรมเนียม",
-	"Платник зборів",
-	"Người thanh toán phí",
-	"Pembayar biaya",
-	"Nagbabayad ng bayarin",
-	"ফি পেয়ার"
+const char* language_table_receiver[] = {
+	"Receiver",
+	"接收方",
+	"接收方",
+	"Récepteur",
+	"Receptor",
+	"المستلم",
+	"受取人",
+	"Получатель",
+	"수령자",
+	"Recebedor",
+	"Recebedor",
+	"Destinatario",
+	"Empfänger",
+	"प्राप्तकर्ता",
+	"Хүлээн авагч",
+	"ผู้รับเงิน",
+	"Одержувач",
+	"Người nhận",
+	"Penerima",
+	"Tagatanggap ng bayad",
+	"প্রাপক"
 };
 
 const char* language_table_format[] = {
@@ -55,27 +55,28 @@ const char* language_table_format[] = {
 	"ফরম্যাট"
 };
 
-const char* language_table_message_hash[] = {
-	"Message Hash",
-	"消息哈希",
-	"消息哈希",
-	"Hachage du message",
-	"Hash del mensaje",
-	"تجزئة الرسالة",
-	"メッセージハッシュ",
-	"Хэш сообщения",
-	"메시지 해시",
-	"Hash da mensagem",
-	"Hash da mensagem",
-	"Hash del messaggio",
-	"Nachricht Hash",
-	"संदेश हैश",
-	"Хэш паведамлення",
-	"แฮชข้อความ",
-	"Хеш повідомлення",
-	"Băm lại thông điệp",
-	"Hash pesan",
-	"Message Hash"
+const char* language_table_message_amount[] = {
+	"Total Amount",
+	"总金额",
+	"總金額",
+	"Montant total",
+	"Cantidad total",
+	"المبلغ الإجمالي",
+	"総額",
+	"Общая сумма",
+	"총액",
+	"Valor total",
+	"Valor total",
+	"Importo totale",
+	"Gesamtbetrag",
+	"कुल राशि",
+	"Нийт дүн",
+	"จำนวนรวม",
+	"Загальна сума",
+	"Tổng số tiền",
+	"Jumlah total",
+	"Kabuuang halaga",
+	"মোট পরিমাণ"
 };
 
 const char* language_table_wallet_ready[] = {
@@ -2194,28 +2195,28 @@ const char* language_table_directions[] = {
 	"निर्देशन"
 };
 
-const char* language_table_more[] = {
-	"More",
-	"更多",
-	"更多",
-	"Plus",
-	"Más",
-	"المزيد",
-	"もっと見る",
-	"Больше",
-	"더 보기",
-	"Mais",
-	"Mais do Brasil",
-	"Di più",
-	"Mehr",
-	"अधिक",
-	"Илүү их",
-	"เพิ่มเติม",
-	"Більше",
-	"Thêm",
-	"Lebih banyak",
-	"Higit pa",
-	"আরো"
+const char* language_table_fee[] = {
+	"Fee",
+	"费用",
+	"費用",
+	"Frais",
+	"Tasas",
+	"رسوم",
+	"手数料",
+	"Сборы",
+	"수수료",
+	"Taxas",
+	"Taxas",
+	"Tassa",
+	"Gebühren",
+	"शुल्क",
+	"Тариф",
+	"ค่าธรรมเนียม",
+	"Збір",
+	"Phí",
+	"Biaya",
+	"Bayarin",
+	"ফি"
 };
 
 const char* language_table_reject[] = {

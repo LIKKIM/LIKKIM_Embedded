@@ -133,6 +133,7 @@ int parse_sign_data(const char *input, ParsedData *parsed) {
 }
 
 // 解析字符串并分段
+extern uint8_t WalletSignFlag;
 void parse_destination_address(char *command) {
     // 获取 "destinationAddress:" 后的部分
     char *data = command + 19;
@@ -162,11 +163,11 @@ void parse_destination_address(char *command) {
         token = strtok(NULL, ",");
         field_count++;
     }
+    WalletSignFlag =1;
 }
 extern WalletInfo *infoWallet;//钱包
 // 处理传入的命令
 ParsedData parsed; //签名数据
-extern uint8_t WalletSignFlag;
 void parse_command(char *command) {
     // 处理包含 sign: 的数据
        if (strncasecmp(command, "sign:", 5) == 0) {
@@ -180,7 +181,7 @@ void parse_command(char *command) {
 
              send_serial_data("signed_data:%s,%s\n",parsed.coin,  parsed.bch_sign);
             //  send_serial_data("signed_data:%s\n",parsed.coin);
-            WalletSignFlag =1;
+           
         }
     } 
     // 处理其他命令

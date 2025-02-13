@@ -103,11 +103,11 @@ void *gui_data_get_address_info(void);
 void *gui_data_get_address_path(void);
 
 /*获取fee_payer的内容*/
-void *gui_data_get_transaction_fee_payer(void);
+void *gui_data_get_transaction_fee_receiver(void);
 /*获取fomat的内容*/
 void *gui_data_get_transaction_format(void);
-/*获取hash的内容*/
-void *gui_data_get_transaction_hash(void);
+/*获取amount的内容*/
+void *gui_data_get_transaction_amount(void);
 
 void savedata(void);
 
