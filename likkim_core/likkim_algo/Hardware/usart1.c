@@ -170,7 +170,7 @@ extern WalletInfo *infoWallet;//钱包
 ParsedData parsed; //签名数据
 void parse_command(char *command) {
     // 处理包含 sign: 的数据
-       if (strncasecmp(command, "sign:", 5) == 0) {
+    if (strncasecmp(command, "sign:", 5) == 0) {
         if (parse_sign_data(command, &parsed) == 0) {
             
             printf("Parsed sign data:\nCoin: %s\nPath: %s\nSign Data: %s\n", 
@@ -179,7 +179,7 @@ void parse_command(char *command) {
             // 使用 memcpy 来复制字符串
             memcpy(parsed.bch_sign, bch_sign,strlen(bch_sign)+1); // 留出空间给 '\0'
 
-             send_serial_data("signed_data:%s,%s\n",parsed.coin,  parsed.bch_sign);
+            send_serial_data("signed_data:%s,%s\n",parsed.coin,  parsed.bch_sign);
             //  send_serial_data("signed_data:%s\n",parsed.coin);
            
         }

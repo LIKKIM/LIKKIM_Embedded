@@ -18,10 +18,9 @@ static void continue_cb(lv_event_t* e)
 
     if (LV_EVENT_SHORT_CLICKED == event)
     {
-        // view_transaction_main_stop();
-		// gui_algo_data_get_pagelocationsave("stop");
+        view_transaction_main_stop();
 		printf("view_transaction_confirm_start!!!!!!\r\n");
-		// view_transaction_confirm_start();
+		view_transaction_confirm_start();
     }
 }
 
@@ -32,7 +31,7 @@ static void reject_cb(lv_event_t* e)
     if (LV_EVENT_SHORT_CLICKED == event)
     {
         view_transaction_main_stop();
-		gui_algo_data_get_pagelocationsave("stop");
+		//gui_algo_data_get_pagelocationsave("stop");
         settings_security_start();
     }
 }
@@ -196,6 +195,7 @@ void view_transaction_main_start(void)
  void view_transaction_main_stop(void)
 {
     lv_obj_del(p_view_transaction_main->bg_cont);
+	p_view_transaction_main->bg_cont = NULL;
     lv_mem_free(p_view_transaction_main);
     p_view_transaction_main = NULL;
 }

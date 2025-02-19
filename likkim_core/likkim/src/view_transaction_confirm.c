@@ -86,8 +86,10 @@ void view_transaction_confirm_start(void)
 
  void view_transaction_confirm_stop(void)
 {
-    lv_timer_del(p_view_transaction_confirm->timer);
+    if(p_view_transaction_confirm->timer != NULL)
+        lv_timer_del(p_view_transaction_confirm->timer);
     lv_obj_del(p_view_transaction_confirm->bg_cont);
+    p_view_transaction_confirm->bg_cont = NULL;
     lv_mem_free(p_view_transaction_confirm);
     p_view_transaction_confirm = NULL;
 }

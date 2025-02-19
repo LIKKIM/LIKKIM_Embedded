@@ -23,6 +23,24 @@ extern void startup_quick_start_start(void);
 
 static startup_language_t* p_startup_language = NULL;
 
+static void title_cb(lv_event_t* e)
+{
+    lv_event_code_t event = lv_event_get_code(e);
+
+    if (LV_EVENT_SHORT_CLICKED == event)
+    {
+        if(APP_GENERAL == p_startup_language->app_index)
+		{
+            startup_language_stop();
+        	general_main_start();
+		}
+		else if(APP_STARTUP == p_startup_language->app_index)
+		{
+            startup_language_stop();
+	        startup_quick_start_start();
+        }
+    }
+}
 
 static void startup_language_event_handler(lv_event_t* e)
 {
@@ -47,7 +65,7 @@ static void startup_language_event_handler(lv_event_t* e)
 
 static void startup_language_bg_cont(lv_obj_t* parent)
 {
-	gui_comm_draw_title(parent, language_table_language, NULL);
+	gui_comm_draw_title(parent, language_table_language, title_cb);
 	    
     for (int i = 0; i < sizeof(startup_language_desc_table) / sizeof(gui_comm_imgbtn_desc2_t); i++)
     {
@@ -66,6 +84,8 @@ static void startup_language_bg_cont(lv_obj_t* parent)
 
 void startup_language_start(app_index_t app_index)
 {
+    if(p_startup_language != NULL)
+        return;
     printf("%s\n", __func__);
     gui_algo_data_set_pagelocation("startup_language",0);
     p_startup_language = (startup_language_t*)lv_mem_alloc(sizeof(startup_language_t));

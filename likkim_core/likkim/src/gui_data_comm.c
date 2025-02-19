@@ -833,7 +833,7 @@ void gui_data_set_bg_src_id(uint8_t id)
 
 language_type_t gui_data_get_language_type(void)
 {
-	printf("%s %d\n", __func__, p_gui_data->language_type);
+	//printf("%s %d\n", __func__, p_gui_data->language_type);
 	return p_gui_data->language_type;
 }
 
@@ -1329,5 +1329,4 @@ void gui_data_deinit(void)
     lv_mem_free(p_gui_data);
     p_gui_data = NULL;
 }
-
 
