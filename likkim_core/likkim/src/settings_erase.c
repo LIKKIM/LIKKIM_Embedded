@@ -10,6 +10,18 @@ extern void settings_security_start(void);
 
 static settings_erase_t* p_settings_erase = NULL;
 
+static void check_options_selected(void)
+{
+    if(p_settings_erase->check1 || p_settings_erase->check2)
+    {
+        lv_obj_add_flag(p_settings_erase->slider, LV_OBJ_FLAG_CLICKABLE);
+    }
+    else
+    {
+        lv_obj_clear_flag(p_settings_erase->slider, LV_OBJ_FLAG_CLICKABLE);
+    }
+}
+
 static void timer_cb(lv_timer_t * tmr)
 {
     if(1)
@@ -37,6 +49,8 @@ static void img_check1_cb(lv_event_t* e)
 			lv_img_set_src(p_settings_erase->img_check1, &img_chosen);
 		else
 			lv_img_set_src(p_settings_erase->img_check1, &img_unchosen);
+        
+        check_options_selected();
     }
 }
 
@@ -51,6 +65,8 @@ static void img_check2_cb(lv_event_t* e)
 			lv_img_set_src(p_settings_erase->img_check2, &img_chosen);
 		else
 			lv_img_set_src(p_settings_erase->img_check2, &img_unchosen);
+        
+        check_options_selected();
     }
 }
 
@@ -154,7 +170,7 @@ void settings_erase_start(void)
     settings_erase_bg_cont(p_settings_erase->bg_cont);
 
     // 初始化时将滑块设置为不可滑动
-    lv_obj_add_flag(p_settings_erase->slider, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_clear_flag(p_settings_erase->slider, LV_OBJ_FLAG_CLICKABLE);
 }
 
  void settings_erase_stop(void)
