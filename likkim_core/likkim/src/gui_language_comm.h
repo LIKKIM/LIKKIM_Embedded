@@ -59,6 +59,7 @@ extern const char* language_table_recovery_phrase_instruction[];
 extern const char* language_table_general[];
 extern const char* language_table_guide[];
 extern const char* language_table_settings[];
+extern const char* language_table_nfts[];
 extern const char* language_table_conection_app_wallet[];
 extern const char* language_table_minute[];
 extern const char* language_table_device_shutdown[];
@@ -147,8 +148,8 @@ extern const char* language_table_incorrect_password_locked_8_hours[];
 extern const char* language_table_incorrect_password_2_attempts[];
 extern const char* language_table_incorrect_password_1_attempt[];
 
-
-
+extern const char* language_table_nft_gallery[];
+extern const char* language_table_nft_gallery_infomation[];
 
 extern void set_language_string(lv_obj_t* label, uint8_t font_size, const char** str_table);
 #endif /* __GUI_LANGUAGE_COMM_H__ */

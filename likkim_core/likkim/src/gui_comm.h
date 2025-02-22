@@ -63,7 +63,7 @@ LV_IMG_DECLARE(img_slider_knob_4);
 LV_IMG_DECLARE(img_menu_general);
 LV_IMG_DECLARE(img_menu_guide);
 LV_IMG_DECLARE(img_menu_settings);
-
+LV_IMG_DECLARE(img_menu_nft);
 
 LV_IMG_DECLARE(img_back)
 LV_IMG_DECLARE(img_alert);

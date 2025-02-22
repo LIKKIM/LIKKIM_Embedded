@@ -28,6 +28,7 @@ CSRCS += img_loading.c
 CSRCS += img_menu_general.c
 CSRCS += img_menu_guide.c
 CSRCS += img_menu_settings.c
+CSRCS += img_menu_nft.c
 CSRCS += img_power_10.c
 CSRCS += img_power_25.c
 CSRCS += img_power_50.c

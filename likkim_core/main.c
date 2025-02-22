@@ -12,6 +12,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <signal.h>
 
 #include "gui_comm.h"
 #include "gui_data_comm.h"
@@ -44,6 +45,16 @@ extern WalletInfo *infoWallet;
 
 // variable
 pthread_mutex_t lvgl_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+// signal handler
+void handle_sigint(int sig) {
+    // clean screen after exit
+    lv_obj_t *parent = lv_scr_act();
+    lv_obj_clean(parent);
+    lv_timer_handler();
+    printf("program exit\n");
+    exit(0);
+}
 
 // 线程 1
 void *thread_ui(void *arg) {
@@ -246,6 +257,8 @@ int main() {
     pthread_t thread1, thread2;
     pthread_t async_thread;
     pthread_t button_thread;  // 按键检测线程的ID
+
+    signal(SIGINT, handle_sigint);
 
     // 打开串口设备
     fd = open(SERIAL_PORT, O_RDWR | O_NOCTTY | O_NDELAY);

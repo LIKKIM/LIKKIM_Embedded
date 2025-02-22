@@ -48,6 +48,7 @@ CSRCS += view_transaction_waiting.c
 CSRCS += view_transaction_success.c
 CSRCS += view_addr_main.c
 CSRCS += view_ready_waiting.c
+CSRCS += nft_gallery.c
 
 DEPPATH += --dep-path $(LVGL_DIR)/$(LIKKIM_DIR_NAME)/src
 VPATH += :$(LVGL_DIR)/$(LIKKIM_DIR_NAME)/src

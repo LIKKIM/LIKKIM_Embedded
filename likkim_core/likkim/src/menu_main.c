@@ -5,6 +5,7 @@
 #include "menu_main.h"
 #include "gui_comm.h"
 #include "gui_data_comm.h"
+#include "nft_gallery.h"
 
 extern void connect_main_start(void);
 extern void general_main_start(void);
@@ -16,8 +17,9 @@ static menu_main_t* p_menu_main = NULL;
 static gui_comm_img_desc_t menu_main_img_table[] =
 {
     {language_table_general, 36, 60, &img_menu_general},
-    {language_table_guide, 252, 60, &img_menu_guide},
-    {language_table_settings, 36, 276, &img_menu_guide},
+    //{language_table_guide, 252, 60, &img_menu_guide},
+    {language_table_nfts, 252, 60, &img_menu_nft},
+    {language_table_settings, 36, 276, &img_menu_settings},
     //{language_table_conection_app_wallet, 252, 276, &img_menu_connect},
     //{language_table_balances, 252, 276, &img_menu_balances},
 };
@@ -43,9 +45,13 @@ static void menu_main_word_handler(lv_event_t* e)
 		{
 			guide_main_start();
 		}
-		else if(0 == strcmp((char*)e->user_data, language_table_settings[gui_data_get_language_type()]))
+        else if(0 == strcmp((char*)e->user_data, language_table_settings[gui_data_get_language_type()]))
 		{
 			settings_main_start();
+		}
+        else if(0 == strcmp((char*)e->user_data, language_table_nfts[gui_data_get_language_type()]))
+		{
+			nft_gallery_start();
 		}
     }
 }
