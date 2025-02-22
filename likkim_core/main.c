@@ -137,7 +137,7 @@ void *thread_func2(void *arg) {
             pthread_mutex_lock(&lvgl_mutex);
             gui_algo_data_set_pagelocation(gui_algo_data_get_pagelocation(), 1);
             gui_algo_data_get_pagelocationsave("stop");
-            startup_ready_check_start();
+            startup_language_start(APP_GENERAL);
             pthread_mutex_unlock(&lvgl_mutex);
         } else if (walletCreate == 18) {
             walletCreate = 0;
