@@ -46,6 +46,7 @@ static void startup_keypad_ok_cb(lv_event_t* e)
                 startup_enter_pin_stop();
                 startup_set_pin_start(app_index);
             }
+            gui_data_set_pin_wrong_times(0);
         }
         else
         {

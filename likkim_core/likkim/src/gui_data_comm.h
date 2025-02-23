@@ -55,6 +55,8 @@ typedef struct
 
 	int lock_time;			//锁屏时间，单位min，-1是never
 	int shutdown_time;		//关机时间，单位min，-1是never
+	uint32_t pin_lock_min;		//密码锁定时间，单位min
+	uint32_t pin_error_timestamp;	//密码输入错误时间戳
 
 	uint8_t fingerprint_num;	//指纹数量, 0-3
 	uint8_t fingerprint_process;	//指纹数量,0-6

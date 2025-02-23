@@ -1102,13 +1102,20 @@ void gui_data_set_pin_wrong_times(uint8_t pin_wrong_times)
 uint8_t gui_data_get_pin_unlock(void)
 {
 	/*需要硬件对接*/
-	return 1;
+    uint32_t now_timestamp = custom_tick_get();
+    uint32_t lock_time = p_gui_data->pin_lock_min * 60 * 1000;
+
+    if((now_timestamp - p_gui_data->pin_error_timestamp) > lock_time)
+    	return 1;
+    else
+        return 0;
 }
 /*设置输入密码错误锁定时间，单位分钟*/
 void gui_data_set_pin_lock_time(uint32_t lock_time)
 {
 	/*需要硬件对接*/
-
+    p_gui_data->pin_lock_min = lock_time;
+    p_gui_data->pin_error_timestamp = custom_tick_get();
 }
 
 /*触发震动，需要调用震动接口*/
