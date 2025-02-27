@@ -175,7 +175,8 @@ void settings_erase_start(void)
 
  void settings_erase_stop(void)
 {
-    lv_timer_del(p_settings_erase->timer);
+    if(p_settings_erase->timer != NULL)
+        lv_timer_del(p_settings_erase->timer);
     lv_obj_del(p_settings_erase->bg_cont);
     lv_mem_free(p_settings_erase);
     p_settings_erase = NULL;
