@@ -22,6 +22,7 @@
         "string_view": "c",
         "startup_import_word.h": "c",
         "settings_erase.h": "c",
-        "random": "c"
+        "random": "c",
+        "fcntl.h": "c"
     }
 }

@@ -35,8 +35,8 @@ static void reject_cb(lv_event_t* e)
     {
         view_transaction_confirm_stop();
         view_transaction_main_start();
-        printf("Signed_OK\r\n");
-        send_serial_data("Signed_OK\n");
+        printf("Signed_OK");
+        send_serial_data("Signed_OK");
     }
 }
 

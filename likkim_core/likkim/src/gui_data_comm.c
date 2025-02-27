@@ -354,7 +354,7 @@ static const char* const wordlist[] = {
     "work",     "world",    "worry",    "worth",    "wrap",     "wreck",
     "wrestle",  "wrist",    "write",    "wrong",    "yard",     "year",
     "yellow",   "you",      "young",    "youth",    "zebra",    "zero",
-    "zone",     "zoo",      0,
+    "zone",     "zoo",  
 };
 static gui_data_t *p_gui_data = NULL;
 static gui_algo_data_t  *p_gui_algo_data=NULL;
@@ -363,6 +363,7 @@ extern void general_lock_start(void);
 extern void startup_screen_start(app_index_t app_index);
 extern void * data_get_transaction_amount(void);
 extern void * gui_get_transaction_fee_receiver(void);
+extern void *data_get_transaction_sender(void);
 uint8_t walletInput =0;
 WalletInfo *infoWallet;
 
@@ -789,8 +790,12 @@ void *gui_data_get_transaction_fee_receiver(void)
 /*获取amount的内容*/
 void *gui_data_get_transaction_amount(void)
 {
-	// return data_get_transaction_amount();
-    return "0.01";
+	return data_get_transaction_amount();
+    
+}
+void * gui_data_get_transaction_sender(void)
+{
+    return data_get_transaction_sender();
 }
 
 
@@ -934,11 +939,6 @@ void gui_data_set_word(uint8_t word_index, char *word)
 {
 	printf("%s index:%d %s\n", __func__, word_index, word);
 	strcpy(p_gui_data->word[word_index], word);
-
-	// if(word_index == gui_data_get_word_num() - 1)
-	// 	p_gui_data->word_set_complete = true;
-	// else
-	// 	p_gui_data->word_set_complete = false;
 }
 
 int gui_data_get_shutdown_time(void)
@@ -1122,14 +1122,14 @@ void gui_comm_do_shake(uint8_t count)
 
     // 设置 GPIO 引脚 0 为高电平
     set_gpio_value(GPIO_PIN, 1);
-    printf("GPIO%d set to HIGH\n", GPIO_PIN);
+
 
     // 延时 3 秒
     usleep(30000);
 
     // 设置 GPIO 引脚 0 为低电平
     set_gpio_value(GPIO_PIN, 0);
-    printf("GPIO%d set to LOW\n", GPIO_PIN);
+
 
     // 清理 GPIO 引脚 0
     unexport_gpio(GPIO_PIN);
@@ -1151,27 +1151,34 @@ uint8_t wallet_Input_get(void)
 }
 
 /*助记词已经创建成功*/
-void gui_data_sueess(uint8_t count){
+uint8_t gui_data_sueess(uint8_t count){
+
     if(count ==1)
     {
-
-         p_gui_data->word_set_complete =true;
-         printf("p_gui_data->word_set_complete = %s\n", p_gui_data->word_set_complete ?"true":"false");
-
+        p_gui_data->word_set_complete =true;
+        printf("p_gui_data->word_set_complete = %s\n", p_gui_data->word_set_complete ?"true":"false");
+        return 1;
     }
     else if(count ==0)
     {
-         p_gui_data->word_set_complete =false;
-         printf("p_gui_data->word_set_complete = %s\n", p_gui_data->word_set_complete?"true":"false");
+        p_gui_data->word_set_complete =false;
+        printf("p_gui_data->word_set_complete = %s\n", p_gui_data->word_set_complete?"true":"false");
+        return 0;
 
     }
     else
     {
         printf("gui_data_sueess is count fail");
+        return 0;
     }
    
     printf("walletinit\r\n");
 
+}
+
+bool  gui_word_set_complete_state(void)
+{
+    return p_gui_data->word_set_complete;
 }
 
 void savedata(void)
@@ -1227,7 +1234,7 @@ void SaveWalletToEmmc(gui_data_t *data) {
     }
 
     fclose(file);
-    // printf("Data successfully saved to %s\n", DATA_FILE_INIT);
+
 }
 
 // 读取eMMC中的数据

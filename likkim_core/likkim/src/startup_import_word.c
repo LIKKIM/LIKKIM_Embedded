@@ -9,6 +9,8 @@
 
 extern void startup_import_ready_start(void);
 extern void startup_import_wallet_start(void);
+extern void view_ready_waiting_start(void);
+
 static void startup_import_word_show_remind_word(lv_obj_t* parent);
 
 static startup_import_word_t* p_startup_import_word = NULL;
@@ -18,7 +20,9 @@ static void timer_cb(lv_timer_t * timer)
 	if(p_startup_import_word->word_index == gui_data_get_word_num())
 	{
 		startup_import_word_stop();
-		startup_import_ready_start();
+		view_ready_waiting_start();
+		 wallet_Input_word(1);/*导入钱包标志位赋值*/
+
 		return;
 	}
 	lv_obj_clean(p_startup_import_word->bg_cont2);

@@ -18,6 +18,7 @@ LV_FONT_DECLARE(font_40)
 
 extern const char* language_table_screen_never_turn_off[];
 extern const char* language_table_receiver[];
+extern const char* language_table_sender[];
 extern const char* language_table_format[];
 extern const char* language_table_message_amount[];
 extern const char* language_table_wallet_ready[];

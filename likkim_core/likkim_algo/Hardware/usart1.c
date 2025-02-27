@@ -9,8 +9,10 @@ int fd; // 串口文件描述符
 volatile int running = 1;  // 控制线程是否继续运行
 signdata sign_data; //签名数据
  extern uint8_t walletCreate ;
+extern WalletInfo *infoWallet;//钱包
 extern uint8_t walletInput;
  char *bch_sign=NULL;//签名数据
+
 
 // 从串口读取数据并打印
 void *read_serial_data(void *arg) {
@@ -144,16 +146,19 @@ void parse_destination_address(char *command) {
 
     while (token != NULL) {
         switch (field_count) {
-            case 0: // destinationAddress
+            case 0: // destinationAddress ReceiveAddress
                 strncpy(sign_data.destinationAddress, token, sizeof(sign_data.destinationAddress) - 1);
                 break;
-            case 1: // amount
+            case 1: //  ReceiveAddress
+                strncpy(sign_data.ReceiveAddress, token, sizeof(sign_data.ReceiveAddress) - 1);
+                break;
+            case 2: // amount
                 sign_data.amount = atof(token);
                 break;
-            case 2: // coin
+            case 3: // coin
                 strncpy(sign_data.coin, token, sizeof(sign_data.coin) - 1);
                 break;
-            case 3: // path
+            case 4: // path
                 strncpy(sign_data.path, token, sizeof(sign_data.path) - 1);
                 break;
             default:
@@ -165,7 +170,43 @@ void parse_destination_address(char *command) {
     }
     WalletSignFlag =1;
 }
-extern WalletInfo *infoWallet;//钱包
+
+void parse_pubkey_data(char *command) {
+    // 获取 "pubkey:" 后的部分
+    char *data = command + 7;  // "pubkey:" 的长度为7
+
+    // 通过逗号分割字符串
+    char *token = strtok(data, ",");
+    int field_count = 0;
+    char coin[20] = {0};  // 清空 coin 数组
+    char coinAddress[20] = {0};  // 清空 coinAddress 数组
+
+    while (token != NULL) {
+        switch (field_count) {
+            case 0: // coin (币种)
+                strncpy(coin, token, sizeof(coin) - 1);  // 使用 strncpy 来确保不会溢出
+                break;
+            case 1: // coinAddress (币种地址)
+                strncpy(coinAddress, token, sizeof(coinAddress) - 1);  // 使用 strncpy 来确保不会溢出
+                break;
+            default:
+                printf("Unexpected data: %s\n", token);
+                break;
+        }
+        token = strtok(NULL, ",");
+        field_count++;
+    }
+
+    if (coin[0] != '\0' && coinAddress[0] != '\0') {
+        // 调用 get_chain_pubkey 函数，将解析后的币种和币种地址传递进去
+        send_serial_data("pubkeyData:%s,%s\r\n",coin,get_chain_pubkey(coin, infoWallet->seed, infoWallet->seed_len,coinAddress));
+    } else {
+        printf("Error: coin or coinAddress is missing.\n");
+    }
+
+}
+
+
 // 处理传入的命令
 ParsedData parsed; //签名数据
 void parse_command(char *command) {
@@ -220,6 +261,9 @@ void parse_command(char *command) {
     else if(strncasecmp(command, "destinationAddress:", 19) == 0){
         parse_destination_address(command);
         // WalletSignFlag =1;
+    }
+    else if(strncasecmp(command, "pubkey:", 7) == 0){
+         parse_pubkey_data(command);
     }
     else if(strncasecmp(command, "ping", 4) == 0){
         send_serial_data("pong\n");

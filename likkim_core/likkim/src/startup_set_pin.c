@@ -15,7 +15,7 @@ extern void settings_change_pin_start(void);
 extern void startup_import_wallet_start(void);
 
 
-
+uint8_t  App_Startup_Flag =0;
 
 
 static startup_set_pin_t* p_startup_set_pin = NULL;
@@ -49,6 +49,7 @@ static void startup_keypad_ok_cb(lv_event_t* e)
 				if(APP_STARTUP_CREATE_WALLET == p_startup_set_pin->app_index)
 				{
                     uint8_t app_index = p_startup_set_pin->app_index;
+                    App_Startup_Flag =APP_STARTUP_CREATE_WALLET;
                     startup_set_pin_stop();
 					startup_ready_check_start();
                     if(gui_data_get_first_poweron())
@@ -57,9 +58,10 @@ static void startup_keypad_ok_cb(lv_event_t* e)
 				else if(APP_STARTUP_IMPORT_WALLET == p_startup_set_pin->app_index)
 				{
                     uint8_t app_index = p_startup_set_pin->app_index;
+                    App_Startup_Flag =APP_STARTUP_IMPORT_WALLET;
                     startup_set_pin_stop();
-					startup_import_wallet_start();
-                    gui_data_set_word_num(12);
+					// startup_import_wallet_start();
+                    startup_ready_check_start();
                     if(gui_data_get_first_poweron())
 						finger_poweron_start(app_index);
 				}

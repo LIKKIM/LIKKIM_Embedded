@@ -9,8 +9,9 @@
 
 extern uint8_t walletwordFlag; //数据创建成功标志位
 extern char mnemonicWord[MAX_MNEMONIC_WORDS][MAX_WORD_LENGTH];
-
-
+extern  void startup_invalid_recovery_start(void);
+extern  void startup_import_ready_start(void);
+extern uint8_t  App_Startup_Flag ;
 static view_transaction_waiting_t* p_view_transaction_waiting = NULL;
 
 static void timer_cb(lv_timer_t * tmr)
@@ -27,6 +28,23 @@ static void timer_cb(lv_timer_t * tmr)
             }
             view_ready_waiting_stop();
             startup_recovery_start();
+    }
+    if(wallet_Input_get()==3)
+    {
+        wallet_Input_word(0);
+        if(gui_word_set_complete_state()==true)
+        {
+            view_ready_waiting_stop();
+            startup_import_ready_start();
+        }
+        else if(gui_word_set_complete_state() ==false)
+        {
+            App_Startup_Flag =APP_STARTUP_IMPORT_WALLET;
+            view_ready_waiting_stop();
+            startup_ready_check_start();
+
+        }
+
     }
 }
 

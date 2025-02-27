@@ -1,8 +1,8 @@
 # 定义编译器和编译选项
-# CC = arm-none-eabi-gcc
-# AR = arm-none-eabi-ar
 CC = arm-linux-gnueabihf-gcc
 AR = arm-linux-gnueabihf-ar
+# CC = gcc
+# AR = ar
 CFLAGS = -I.
 
 # 定义库路径和库名

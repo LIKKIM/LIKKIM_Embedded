@@ -126,25 +126,23 @@ void *thread_func2(void *arg) {
             walletInit(32,"");
         }
 
-        if(wallet_Input_get()==1){        //创建导入钱包标志位
-            wallet_Input_word(0);
-            if(import_wallet_init()==1)
-            printf("import_wallet_init:succeed\r\n");
-            else
-                printf("import_wallet_init:fail\r\n");
-             
-            // startup_import_abort_start();
+        if(wallet_Input_get()==1){        //创建导入钱包标志位 
+            if(import_wallet_init()==1){
+                gui_data_sueess(1);/*助记词已经创建成功*/
+                wallet_Input_word(3);
+            }      
+            else{
+                gui_data_sueess(0);/*助记词已经创建fail*/
+                wallet_Input_word(3);
+            }
+                 
 
-        }
-        else if (wallet_Input_get()==3){
-            wallet_Input_word(0);
-            // printf("p_startup_import_word->word:%s\r\n",p_startup_import_word->word);
-            
         }
         if(AddressFlag==1)     //显示地址
         {
             gui_algo_data_set_pagelocation(gui_algo_data_get_pagelocation(),1);
             gui_algo_data_get_pagelocationsave("stop");
+            send_serial_data("Address_OK\n");
             view_addr_main_start();
             AddressFlag=0;
         }
@@ -159,8 +157,8 @@ void *thread_func2(void *arg) {
         if(WalletSignFlag ==1)  //签名
         {  
             WalletSignFlag =0;
-            // gui_algo_data_set_pagelocation(gui_algo_data_get_pagelocation(),1);
-            // gui_algo_data_get_pagelocationsave("stop");
+            gui_algo_data_set_pagelocation(gui_algo_data_get_pagelocation(),1);
+            gui_algo_data_get_pagelocationsave("stop");
             view_transaction_main_start();
 
         }
@@ -315,9 +313,8 @@ uint32_t custom_tick_get(void)
 
 void * data_get_transaction_amount(void)
 {
-     char str[20]; // 足够大的字符数组来存储浮点数的字符串表示
-      // 使用 sprintf() 将浮点数格式化为字符串
-        sprintf(str, "%.4f",  sign_data.amount);  // 这里保留4位小数，格式化为字符串
+     char str[20]; 
+        sprintf(str, "%.9f",  sign_data.amount);  
         printf("%s\r\n",str);
     return str;
 }
@@ -327,4 +324,9 @@ void * gui_get_transaction_fee_receiver(void)
 {
     return sign_data.destinationAddress;
 
+}
+
+void *data_get_transaction_sender(void)
+{
+    return sign_data.ReceiveAddress;
 }

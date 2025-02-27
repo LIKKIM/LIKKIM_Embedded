@@ -31,6 +31,31 @@ const char* language_table_receiver[] = {
 	"প্রাপক"
 };
 
+const char* language_table_sender[] = {
+	"Sender",
+	"发送方",
+	"发送方",
+	"Expéditeur",
+	"Emisor",
+	"المرسل",
+	"送信者",
+	"Отправитель",
+	"발신자",
+	"Remetente",
+	"Remetente",
+	"Remitente",
+	"Absender",
+	"प्रेषक",
+	"Илгээх хүн",
+	"ผู้ส่ง",
+	"Відправник",
+	"Người gửi",
+	"Pengirim",
+	"Nagpadala ng bayad",
+	"প্রেরক"
+};
+
+
 const char* language_table_format[] = {
 	"Format",
 	"格式",

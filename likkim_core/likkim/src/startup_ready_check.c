@@ -11,9 +11,10 @@
 extern void startup_quick_start_start(void);
 extern void startup_recovery_start(void);
 extern void view_ready_waiting_start(void);
+extern void startup_import_wallet_start(void);
 
 uint8_t walletCreate =0;
-
+extern uint8_t  App_Startup_Flag ;
 
 
 static startup_ready_check_t* p_startup_ready_check = NULL;
@@ -41,11 +42,26 @@ static void startup_btn_event_handler(lv_event_t* e)
 		printf("%s, ret : %d\n", (char *)e->user_data, ret);
 		gui_data_set_word_num(ret);
         
-        if(ret ==12||ret==18||ret==24)  //判断单词数量
-        walletCreate =ret;
+        if(App_Startup_Flag ==APP_STARTUP_CREATE_WALLET)
+        {
+            App_Startup_Flag=0;
+                /*******创建钱包标志位**************/
+            if(ret ==12||ret==18||ret==24)  //判断单词数量
+            walletCreate =ret;
 
-        startup_ready_check_stop();
-        view_ready_waiting_start();
+            startup_ready_check_stop();
+            view_ready_waiting_start();
+            /************************************/
+        }
+        else if(App_Startup_Flag ==APP_STARTUP_IMPORT_WALLET)
+        {
+            App_Startup_Flag=0;
+            gui_data_set_word_num(ret);
+            startup_ready_check_stop();
+            startup_import_wallet_start();
+
+        }
+        
 
             
         

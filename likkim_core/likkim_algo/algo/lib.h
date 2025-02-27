@@ -2,6 +2,8 @@
 #define _LIB_H_
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdint.h>
 // 钱包信息结构
 typedef struct
 {
@@ -89,8 +91,10 @@ char *get_chain_address(char *chain_name, char *hd_path);
 // 获取支持的所有收款地址
 AllChainAddressStruct *get_all_pub_address();
 
+char *get_chain_pubkey(char *chain_name, uint8_t *seed, size_t seed_len, char *hd_path);
+
 // btc交易签名
-char *sign_tx_for_btc(char *tx, uint8_t *seed, size_t seed_len, char *hd_path);
+char *sign_tx_for_btc(char *tx, uint8_t *seed, size_t seed_len, char *hd_path, char *chain_code);
 
 // tron交易签名
 // data 交易数据，json格式 见readme.md
@@ -113,3 +117,4 @@ void LogRustPanic(char *panic_info);
 void LogRustMalloc(void *p, uint32_t size);
 void LogRustFree(void *p);
 #endif
+

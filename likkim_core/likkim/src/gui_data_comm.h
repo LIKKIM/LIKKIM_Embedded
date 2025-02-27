@@ -108,6 +108,8 @@ void *gui_data_get_transaction_fee_receiver(void);
 void *gui_data_get_transaction_format(void);
 /*获取amount的内容*/
 void *gui_data_get_transaction_amount(void);
+/*获取sender的内容*/
+void * gui_data_get_transaction_sender(void);
 
 void savedata(void);
 
@@ -172,6 +174,8 @@ uint8_t gui_algo_data_get_pagelocationsave(char *state);
 char * gui_algo_data_get_pagelocation(void);
 void gui_rest_data(void);
 void word_set_completeture(void);
+uint8_t gui_data_sueess(uint8_t count);
+bool  gui_word_set_complete_state(void);
 
 #endif /* __GUI_DATA_COMM_H__ */
 

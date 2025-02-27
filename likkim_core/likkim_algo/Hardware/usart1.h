@@ -32,6 +32,7 @@ typedef struct {
 
 typedef struct {
     char destinationAddress[256];
+    char ReceiveAddress[256];
     float amount;
     char coin[32];
     char path[64];

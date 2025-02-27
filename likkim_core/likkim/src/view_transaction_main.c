@@ -22,6 +22,7 @@ static void continue_cb(lv_event_t* e)
 		// gui_algo_data_get_pagelocationsave("stop");
 		printf("view_transaction_confirm_start!!!!!!\r\n");
 		// view_transaction_confirm_start();
+        send_serial_data("Signed_OK\n");
     }
 }
 
@@ -95,6 +96,23 @@ static void view_transaction_main_bg_cont(lv_obj_t* parent)
 	lv_label_set_text(label_fee_content, gui_data_get_transaction_fee_receiver());
 	lv_obj_update_layout(label_fee_content);
 	lv_obj_set_size(bg_obj_directions, 400, lv_obj_get_height(label_fee_content) + 140 + 20);
+
+	lv_obj_t* label_hash = lv_label_create(bg_obj_directions);
+	lv_obj_set_style_text_color(label_hash, lv_color_hex(0xffffff), 0);
+	lv_label_set_long_mode(label_hash, LV_LABEL_LONG_WRAP);
+	lv_obj_set_width(label_hash, 320);
+	lv_obj_align_to(label_hash, label_fee_content, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+	set_language_string(label_hash, 24,  language_table_sender);
+	lv_obj_update_layout(label_hash);
+
+	lv_obj_t* label_hash_content = lv_label_create(label_fee_content);
+	lv_obj_set_style_text_color(label_hash_content, lv_color_hex(0xffffff), 0);
+	lv_obj_set_style_text_font(label_hash_content, &font_24, 0);
+	lv_label_set_long_mode(label_hash_content, LV_LABEL_LONG_WRAP);
+	lv_obj_set_width(label_hash_content, 320);
+	lv_obj_align_to(label_hash_content, label_hash, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+	lv_label_set_text(label_hash_content, gui_data_get_transaction_sender());
+	lv_obj_update_layout(label_hash_content);
 
 /*第二个滑动框*/
 	lv_obj_t *bg_obj_more = lv_obj_create(bg_obj);
