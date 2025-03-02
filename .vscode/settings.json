@@ -5,6 +5,7 @@
         "gui_data_comm.h": "c",
         "menu_main.h": "c",
         "gui_language_comm.h": "c",
-        "settings_main.h": "c"
+        "settings_main.h": "c",
+        "fbdev.h": "c"
     }
 }

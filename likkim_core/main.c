@@ -32,7 +32,9 @@
 #include "usart1.h"
 
 // 宏定义
-#define DISP_BUF_SIZE (800 * 480)
+#define DISP_WIDTH      800
+#define DISP_HEIGHT     480
+#define DISP_BUF_SIZE   (DISP_WIDTH * DISP_HEIGHT)
 //  const char *path = "/sys/class/backlight/panel-backlight/bl_power";
 #define BUTTON_PATH "/dev/input/event1"  // 按键事件设备文件路径
 // 全局变量
@@ -46,13 +48,31 @@ extern WalletInfo *infoWallet;
 // variable
 pthread_mutex_t lvgl_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+
+static void clear_fb(void) {
+    lv_area_t area;
+    lv_color_t buf[DISP_BUF_SIZE];
+
+    memset(buf, 0, sizeof(buf));
+    area.x1 = 0;
+    area.y1 = 0;
+    area.x2 = DISP_WIDTH;
+    area.y2 = DISP_HEIGHT;
+    fbdev_flush(NULL, &area, buf);
+}
+
 // signal handler
 void handle_sigint(int sig) {
     // clean screen after exit
-    lv_obj_t *parent = lv_scr_act();
-    lv_obj_clean(parent);
-    lv_timer_handler();
+    clear_fb();
     printf("program exit\n");
+    exit(0);
+}
+
+void handle_sigsegv(int sig) {
+    // clean screen after segmentation fault
+    clear_fb();
+    printf("segmentation fault\n");
     exit(0);
 }
 
@@ -267,6 +287,7 @@ int main() {
     pthread_t button_thread;  // 按键检测线程的ID
 
     signal(SIGINT, handle_sigint);
+    signal(SIGSEGV, handle_sigsegv);
 
     // 打开串口设备
     fd = open(SERIAL_PORT, O_RDWR | O_NOCTTY | O_NDELAY);
