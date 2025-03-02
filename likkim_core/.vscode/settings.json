@@ -23,6 +23,7 @@
         "startup_import_word.h": "c",
         "settings_erase.h": "c",
         "random": "c",
-        "fcntl.h": "c"
-    }
+        "startup_language.h": "c"
+    },
+    "cmake.sourceDirectory": "/media/psf/Home/Downloads/LIKKIM_Embedded/likkim_core/lv_drivers"
 }

@@ -1046,6 +1046,30 @@ const char* language_table_settings[] = {
 	"সেটিংস"
 };
 
+const char* language_table_nfts[] = {
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+	"NFTs",
+};
+
 const char* language_table_conection_app_wallet[] = {
 	"Connect App Wallet",
 	"连接应用钱包",
@@ -2702,6 +2726,54 @@ const char* language_table_incorrect_password_1_attempt[] = {
     "كلمة المرور غير صحيحة. لديك محاولة واحدة متبقية. تجاوز الحد.",
     "パスワードが間違っています。あと1回試せます。制限を超えています。",
     "Неправильный пароль. У вас осталась 1 попытка. Превышая лимит."
+};
+
+const char* language_table_nft_gallery[] = {
+	"NFT Gallery",
+	"NFT 畫廊",
+	"NFT 畫廊",
+	"Galerie NFT",
+	"Galería de NFT",
+	"معرض NFT",
+	"ギャラリーNFT",
+	"Галерея NFT",
+	"NFT 갤러리",
+	"Galeria de NFT",
+	"Galeria de NFT",
+	"Galleria NFT",
+	"NFT-Galerie",
+	"गैलरी NFT",
+	"Галерея NFT",
+	"แกลเลอรี NFT",
+	"Галерея NFT",
+	"NFT Gallery",
+	"Galeri NFT",
+	"NFT Gallery",
+	"NFT গ্যালারি"
+};
+
+const char* language_table_nft_gallery_infomation[] = {
+	"Open the LIKKIM app, locate the NFT linked to this hardware wallet, and press the 'Add to Collection' button.",
+	"打开LIKKIM应用，找到与此硬件钱包链接的NFT，点击'添加到收藏'按钮。",
+	"打開LIKKIM應用，找到與此硬件錢包鏈接的NFT，點擊'添加到收藏'按鈕。",
+	"ouvrez l'application LIKKIM, localisez le NFT lié à ce portefeuille matériel et appuyez sur le bouton 'Ajouter à la collection'.",
+	"abre la aplicación LIKKIM, localiza el NFT vinculado a esta billetera de hardware y presiona el botón 'Agregar a la colección'.",
+	"افتح تطبيق LIKKIM ، وابحث عن NFT المرتبط بمحفظة الأجهزة هذه ، واضغط على زر 'إضافة إلى المجموعة'.",
+	"LIKKIMアプリを開き、このハードウェアウォレットにリンクされたNFTを探し、「コレクションに追加」ボタンを押してください。",
+	"откройте приложение LIKKIM, найдите NFT, связанный с этим аппаратным кошельком, и нажмите кнопку 'Добавить в коллекцию'.",
+	"LIKKIM 앱을 열고 이 하드웨어 지갑에 연결된 NFT를 찾아 '컬렉션에 추가' 버튼을 누르세요.",
+	"abra o aplicativo LIKKIM, localize o NFT vinculado a esta carteira de hardware e pressione o botão 'Adicionar à Coleção'.",
+	"abra o aplicativo LIKKIM, localize o NFT vinculado a esta carteira de hardware e pressione o botão 'Adicionar à Coleção'.",
+	"apri l'app LIKKIM, trova il NFT collegato a questo portafoglio hardware e premi il pulsante 'Aggiungi alla collezione'.",
+	"öffnen Sie die LIKKIM-App, suchen Sie das mit dieser Hardware-Wallet verknüpfte NFT und drücken Sie die Schaltfläche 'Zur Sammlung hinzufügen'.",
+	"खुला LIKKIM ऐप, इस हार्डवेयर वॉलेट से जुड़ा हुआ NFT ढूंढें, और 'संग्रह में जोड़ें' बटन दबाएं।",
+	"откройте приложение LIKKIM, найдите NFT, связанный с этим аппаратным кошельком, и нажмите кнопку 'Добавить в коллекцию'.",
+	"เปิดแอป LIKKIM, ค้นหา NFT ที่เชื่อมโยงกับกระเป๋าเงินฮาร์ดแวร์นี้ และกดปุ่ม 'เพิ่มในคอลเลกชัน'。",
+	"відкрийте додаток LIKKIM, знайдіть NFT, прив'язаний до цього апаратного гаманця, і натисніть кнопку 'Додати до колекції'.",
+	"Mở ứng dụng LIKKIM, tìm NFT liên kết với ví phần cứng này và nhấn nút 'Thêm vào Bộ sưu tập'.",
+	"buka aplikasi LIKKIM, temukan NFT yang terhubung dengan dompet perangkat keras ini, dan tekan tombol 'Tambahkan ke Koleksi'.",
+	"bukas ang LIKKIM app, hanapin ang NFT na naka-link sa hardware wallet na ito, at i-press ang 'Add to Collection' na button.",
+	"খুলুন LIKKIM অ্যাপ, এই হার্ডওয়্যার ওয়ালেটের সাথে সংযুক্ত NFT খুঁজুন এবং 'কোলেকশনে যুক্ত করুন' বোতামটি টিপুন।"
 };
 
 void set_language_string(lv_obj_t *label, uint8_t font_size, const char** str_table)

@@ -74,6 +74,7 @@ void connect_main_start(void)
  void connect_main_stop(void)
 {
     lv_obj_del(p_connect_main->bg_cont);
+    p_connect_main->bg_cont = NULL;
     lv_mem_free(p_connect_main);
     p_connect_main = NULL;
 }

@@ -1,0 +1,10 @@
+{
+    "cmake.ignoreCMakeListsMissing": true,
+    "files.associations": {
+        "gui_comm.h": "c",
+        "gui_data_comm.h": "c",
+        "menu_main.h": "c",
+        "gui_language_comm.h": "c",
+        "settings_main.h": "c"
+    }
+}

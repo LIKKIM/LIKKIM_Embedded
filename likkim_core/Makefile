@@ -1,7 +1,7 @@
 ﻿#
 # Makefile
 #
-# 编译器和工具
+# compiler and tools
 # ROOTDIR = ~/toolchain/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/bin/
 CC = $(ROOTDIR)arm-none-linux-gnueabihf-gcc
 AR = $(ROOTDIR)arm-none-linux-gnueabihf-ar
@@ -28,32 +28,42 @@ CSRCS +=$(LVGL_DIR)/mouse_cursor_icon.c
 
 OBJEXT ?= .o
 
-AOBJS = $(ASRCS:.S=$(OBJEXT))
-COBJS = $(CSRCS:.c=$(OBJEXT))
-
-MAINOBJ = $(MAINSRC:.c=$(OBJEXT))
+# modify target file path, add build prefix
+BUILD_DIR = build
+AOBJS = $(addprefix $(BUILD_DIR)/,$(notdir $(ASRCS:.S=$(OBJEXT))))
+COBJS = $(addprefix $(BUILD_DIR)/,$(notdir $(CSRCS:.c=$(OBJEXT))))
+MAINOBJ = $(addprefix $(BUILD_DIR)/,$(notdir $(MAINSRC:.c=$(OBJEXT))))
 
 SRCS = $(ASRCS) $(CSRCS) $(MAINSRC)
 OBJS = $(AOBJS) $(COBJS)
 
+# add vpath to help make find source files
+vpath %.c $(sort $(dir $(SRCS)))
+vpath %.S $(sort $(dir $(ASRCS)))
+
 ## MAINOBJ -> OBJFILES
 all:
+	@mkdir -p $(BUILD_DIR)
 	make -C likkim_algo/ LIKKIM_ALL
 	make LVGL_ALL -j4
-	@mkdir -p build
-	@mv $(BIN) build
-	find . -type f -name "*.o" -not -path "./build/*" -exec mv {} build/ \;
 
 LVGL_ALL: $(AOBJS) $(COBJS) $(MAINOBJ)
-	$(CC) -o $(BIN) $(MAINOBJ) $(AOBJS) $(COBJS) $(LDFLAGS)
+	$(CC) -o $(BUILD_DIR)/$(BIN) $(MAINOBJ) $(AOBJS) $(COBJS) $(LDFLAGS)
 
-%.o: %.c
-	@$(CC) $(CFLAGS) -c $< -o $@ 
+# change compile rule
+$(BUILD_DIR)/%.o: %.c
+	@mkdir -p $(BUILD_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "CC $<"
+
+$(BUILD_DIR)/%.o: %.S
+	@mkdir -p $(BUILD_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo "CC $<"
 
 clean: 
-	rm -f build/$(BIN) $(AOBJS) $(COBJS) $(MAINOBJ)
-	rm -f build/*
+	rm -f $(BUILD_DIR)/$(BIN) $(AOBJS) $(COBJS) $(MAINOBJ)
+	rm -rf $(BUILD_DIR)
 	make -C likkim_algo/ clean
 
 export CC AR RANLIB
