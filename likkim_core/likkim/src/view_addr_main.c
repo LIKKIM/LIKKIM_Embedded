@@ -137,6 +137,8 @@ static void view_qrcode(lv_obj_t* parent)
 #elif(LVGL_VERSION_MINOR == 3)
 		lv_obj_t *qrcode = lv_qrcode_create(bg_obj);
 		lv_qrcode_setparam(qrcode, 320, lv_color_hex(0x000000), lv_color_hex(0xffffff));
+#else
+		lv_obj_t *qrcode = lv_qrcode_create(bg_obj, 320, lv_color_hex(0x000000), lv_color_hex(0xffffff));
 #endif
 		
 		lv_qrcode_update(qrcode, "faefawefawef", 12);
