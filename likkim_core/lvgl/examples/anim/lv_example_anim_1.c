@@ -20,7 +20,8 @@ static void sw_event_cb(lv_event_t * e)
         lv_anim_set_exec_cb(&a, anim_x_cb);
         lv_anim_set_path_cb(&a, lv_anim_path_overshoot);
         lv_anim_start(&a);
-    } else {
+    }
+    else {
         lv_anim_t a;
         lv_anim_init(&a);
         lv_anim_set_var(&a, label);
@@ -41,7 +42,6 @@ void lv_example_anim_1(void)
     lv_obj_t * label = lv_label_create(lv_scr_act());
     lv_label_set_text(label, "Hello animations!");
     lv_obj_set_pos(label, 100, 10);
-
 
     lv_obj_t * sw = lv_switch_create(lv_scr_act());
     lv_obj_center(sw);

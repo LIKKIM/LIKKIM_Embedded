@@ -1,7 +1,6 @@
 #include "../../lv_examples.h"
 #if LV_USE_CHART && LV_BUILD_EXAMPLES
 
-
 static void event_cb(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
@@ -78,8 +77,8 @@ void lv_example_chart_4(void)
     lv_chart_series_t * ser2 = lv_chart_add_series(chart, lv_palette_main(LV_PALETTE_GREEN), LV_CHART_AXIS_PRIMARY_Y);
     uint32_t i;
     for(i = 0; i < 10; i++) {
-        lv_chart_set_next_value(chart, ser1, lv_rand(60,90));
-        lv_chart_set_next_value(chart, ser2, lv_rand(10,40));
+        lv_chart_set_next_value(chart, ser1, lv_rand(60, 90));
+        lv_chart_set_next_value(chart, ser2, lv_rand(10, 40));
     }
 }
 

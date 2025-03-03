@@ -19,6 +19,7 @@
 #include "lv_drivers/display/fbdev.h"
 #include "lv_drivers/indev/evdev.h"
 #include "lvgl/lvgl.h"
+#include "lvgl/examples/lv_examples.h"
 
 // 自定义头文件
 #include <linux/input.h>
@@ -116,8 +117,9 @@ void *thread_ui(void *arg) {
      * mouse position and state*/
     indev_drv_1.read_cb = evdev_read;
     lv_indev_t *mouse_indev = lv_indev_drv_register(&indev_drv_1);
-    gui_comm_init();
 
+
+    gui_comm_init();
     gui_data_init();
 
     while (1) {
