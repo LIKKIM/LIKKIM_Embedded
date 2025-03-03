@@ -11,7 +11,7 @@
 #if LV_USE_DEMO_WIDGETS
 
 #if LV_MEM_CUSTOM == 0 && LV_MEM_SIZE < (38ul * 1024ul)
-    #error Insufficient memory for lv_demo_widgets. Please set LV_MEM_SIZE to at least 38KB (38ul * 1024ul).  48KB is recommended. 
+    #error Insufficient memory for lv_demo_widgets. Please set LV_MEM_SIZE to at least 38KB (38ul * 1024ul).  48KB is recommended.
 #endif
 
 /*********************
@@ -25,7 +25,7 @@ typedef enum {
     DISP_SMALL,
     DISP_MEDIUM,
     DISP_LARGE,
-}disp_size_t;
+} disp_size_t;
 
 /**********************
  *  STATIC PROTOTYPES
@@ -35,8 +35,10 @@ static void analytics_create(lv_obj_t * parent);
 static void shop_create(lv_obj_t * parent);
 static void color_changer_create(lv_obj_t * parent);
 
-static lv_obj_t * create_meter_box(lv_obj_t * parent, const char * title, const char * text1, const char * text2, const char * text3);
-static lv_obj_t * create_shop_item(lv_obj_t * parent, const void * img_src, const char * name, const char * category, const char * price);
+static lv_obj_t * create_meter_box(lv_obj_t * parent, const char * title, const char * text1, const char * text2,
+                                   const char * text3);
+static lv_obj_t * create_shop_item(lv_obj_t * parent, const void * img_src, const char * name, const char * category,
+                                   const char * price);
 
 static void color_changer_event_cb(lv_event_t * e);
 static void color_event_cb(lv_event_t * e);
@@ -84,6 +86,8 @@ static uint32_t session_desktop = 1000;
 static uint32_t session_tablet = 1000;
 static uint32_t session_mobile = 1000;
 
+static lv_timer_t * meter2_timer;
+
 /**********************
  *      MACROS
  **********************/
@@ -114,7 +118,8 @@ void lv_demo_widgets(void)
 #else
         LV_LOG_WARN("LV_FONT_MONTSERRAT_16 is not enabled for the widgets demo. Using LV_FONT_DEFAULT instead.");
 #endif
-    } else if(disp_size == DISP_MEDIUM) {
+    }
+    else if(disp_size == DISP_MEDIUM) {
         tab_h = 45;
 #if LV_FONT_MONTSERRAT_20
         font_large     = &lv_font_montserrat_20;
@@ -126,22 +131,24 @@ void lv_demo_widgets(void)
 #else
         LV_LOG_WARN("LV_FONT_MONTSERRAT_14 is not enabled for the widgets demo. Using LV_FONT_DEFAULT instead.");
 #endif
-    } else { /* disp_size == DISP_SMALL */
+    }
+    else {   /* disp_size == DISP_SMALL */
         tab_h = 45;
 #if LV_FONT_MONTSERRAT_18
         font_large     = &lv_font_montserrat_18;
 #else
-    LV_LOG_WARN("LV_FONT_MONTSERRAT_18 is not enabled for the widgets demo. Using LV_FONT_DEFAULT instead.");
+        LV_LOG_WARN("LV_FONT_MONTSERRAT_18 is not enabled for the widgets demo. Using LV_FONT_DEFAULT instead.");
 #endif
 #if LV_FONT_MONTSERRAT_12
         font_normal    = &lv_font_montserrat_12;
 #else
-    LV_LOG_WARN("LV_FONT_MONTSERRAT_12 is not enabled for the widgets demo. Using LV_FONT_DEFAULT instead.");
+        LV_LOG_WARN("LV_FONT_MONTSERRAT_12 is not enabled for the widgets demo. Using LV_FONT_DEFAULT instead.");
 #endif
     }
 
 #if LV_USE_THEME_DEFAULT
-    lv_theme_default_init(NULL, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), LV_THEME_DEFAULT_DARK, font_normal);
+    lv_theme_default_init(NULL, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), LV_THEME_DEFAULT_DARK,
+                          font_normal);
 #endif
 
     lv_style_init(&style_text_muted);
@@ -191,6 +198,22 @@ void lv_demo_widgets(void)
     color_changer_create(tv);
 }
 
+void lv_demo_widgets_close(void)
+{
+    /*Delete all animation*/
+    lv_anim_del(NULL, NULL);
+
+    lv_timer_del(meter2_timer);
+    meter2_timer = NULL;
+
+    lv_obj_clean(lv_scr_act());
+
+    lv_style_reset(&style_text_muted);
+    lv_style_reset(&style_title);
+    lv_style_reset(&style_icon);
+    lv_style_reset(&style_bullet);
+}
+
 /**********************
  *   STATIC FUNCTIONS
  **********************/
@@ -210,7 +233,7 @@ static void profile_create(lv_obj_t * parent)
 
     lv_obj_t * dsc = lv_label_create(panel1);
     lv_obj_add_style(dsc, &style_text_muted, 0);
-    lv_label_set_text(dsc, "This is a short description of me. Take a look at my profile!" );
+    lv_label_set_text(dsc, "This is a short description of me. Take a look at my profile!");
     lv_label_set_long_mode(dsc, LV_LABEL_LONG_WRAP);
 
     lv_obj_t * email_icn = lv_label_create(panel1);
@@ -325,16 +348,15 @@ static void profile_create(lv_obj_t * parent)
 
         static lv_coord_t grid_2_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static lv_coord_t grid_2_row_dsc[] = {
-                LV_GRID_CONTENT,  /*Title*/
-                5,                /*Separator*/
-                LV_GRID_CONTENT,  /*Box title*/
-                30,               /*Boxes*/
-                5,                /*Separator*/
-                LV_GRID_CONTENT,  /*Box title*/
-                30,               /*Boxes*/
-                LV_GRID_TEMPLATE_LAST
+            LV_GRID_CONTENT,  /*Title*/
+            5,                /*Separator*/
+            LV_GRID_CONTENT,  /*Box title*/
+            30,               /*Boxes*/
+            5,                /*Separator*/
+            LV_GRID_CONTENT,  /*Box title*/
+            30,               /*Boxes*/
+            LV_GRID_TEMPLATE_LAST
         };
-
 
         lv_obj_set_grid_dsc_array(parent, grid_main_col_dsc, grid_main_row_dsc);
 
@@ -363,7 +385,6 @@ static void profile_create(lv_obj_t * parent)
         lv_obj_set_grid_cell(gender, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_CENTER, 6, 1);
         lv_obj_set_grid_cell(gender_label, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 5, 1);
 
-
         lv_obj_set_grid_cell(panel3, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
         lv_obj_set_grid_dsc_array(panel3, grid_2_col_dsc, grid_2_row_dsc);
         lv_obj_set_grid_cell(panel3_title, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_CENTER, 0, 1);
@@ -378,33 +399,32 @@ static void profile_create(lv_obj_t * parent)
         static lv_coord_t grid_main_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static lv_coord_t grid_main_row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
 
-
         /*Create the top panel*/
         static lv_coord_t grid_1_col_dsc[] = {LV_GRID_CONTENT, 1, LV_GRID_CONTENT, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static lv_coord_t grid_1_row_dsc[] = {
-                LV_GRID_CONTENT, /*Name*/
-                LV_GRID_CONTENT, /*Description*/
-                LV_GRID_CONTENT, /*Email*/
-                -20,
-                LV_GRID_CONTENT, /*Phone*/
-                LV_GRID_CONTENT, /*Buttons*/
-                LV_GRID_TEMPLATE_LAST};
+            LV_GRID_CONTENT, /*Name*/
+            LV_GRID_CONTENT, /*Description*/
+            LV_GRID_CONTENT, /*Email*/
+            -20,
+            LV_GRID_CONTENT, /*Phone*/
+            LV_GRID_CONTENT, /*Buttons*/
+            LV_GRID_TEMPLATE_LAST
+        };
 
         static lv_coord_t grid_2_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static lv_coord_t grid_2_row_dsc[] = {
-                LV_GRID_CONTENT,  /*Title*/
-                5,                /*Separator*/
-                LV_GRID_CONTENT,  /*Box title*/
-                40,               /*Box*/
-                LV_GRID_CONTENT,  /*Box title*/
-                40,               /*Box*/
-                LV_GRID_CONTENT,  /*Box title*/
-                40,               /*Box*/
-                LV_GRID_CONTENT,  /*Box title*/
-                40,               /*Box*/
-                LV_GRID_TEMPLATE_LAST
+            LV_GRID_CONTENT,  /*Title*/
+            5,                /*Separator*/
+            LV_GRID_CONTENT,  /*Box title*/
+            40,               /*Box*/
+            LV_GRID_CONTENT,  /*Box title*/
+            40,               /*Box*/
+            LV_GRID_CONTENT,  /*Box title*/
+            40,               /*Box*/
+            LV_GRID_CONTENT,  /*Box title*/
+            40,               /*Box*/
+            LV_GRID_TEMPLATE_LAST
         };
-
 
         lv_obj_set_grid_dsc_array(parent, grid_main_col_dsc, grid_main_row_dsc);
         lv_obj_set_grid_cell(panel1, LV_GRID_ALIGN_STRETCH, 0, 2, LV_GRID_ALIGN_CENTER, 0, 1);
@@ -450,33 +470,32 @@ static void profile_create(lv_obj_t * parent)
         static lv_coord_t grid_main_row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
         lv_obj_set_grid_dsc_array(parent, grid_main_col_dsc, grid_main_row_dsc);
 
-
         /*Create the top panel*/
         static lv_coord_t grid_1_col_dsc[] = {LV_GRID_CONTENT, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static lv_coord_t grid_1_row_dsc[] = {LV_GRID_CONTENT, /*Avatar*/
-                                               LV_GRID_CONTENT, /*Name*/
-                                               LV_GRID_CONTENT, /*Description*/
-                                               LV_GRID_CONTENT, /*Email*/
-                                               LV_GRID_CONTENT, /*Phone number*/
-                                               LV_GRID_CONTENT, /*Button1*/
-                                               LV_GRID_CONTENT, /*Button2*/
-                                               LV_GRID_TEMPLATE_LAST};
+                                              LV_GRID_CONTENT, /*Name*/
+                                              LV_GRID_CONTENT, /*Description*/
+                                              LV_GRID_CONTENT, /*Email*/
+                                              LV_GRID_CONTENT, /*Phone number*/
+                                              LV_GRID_CONTENT, /*Button1*/
+                                              LV_GRID_CONTENT, /*Button2*/
+                                              LV_GRID_TEMPLATE_LAST
+                                             };
 
         lv_obj_set_grid_dsc_array(panel1, grid_1_col_dsc, grid_1_row_dsc);
 
-
         static lv_coord_t grid_2_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static lv_coord_t grid_2_row_dsc[] = {
-                LV_GRID_CONTENT,  /*Title*/
-                5,                /*Separator*/
-                LV_GRID_CONTENT,  /*Box title*/
-                40,               /*Box*/
-                LV_GRID_CONTENT,  /*Box title*/
-                40,               /*Box*/
-                LV_GRID_CONTENT,  /*Box title*/
-                40,               /*Box*/
-                LV_GRID_CONTENT,  /*Box title*/
-                40, LV_GRID_TEMPLATE_LAST               /*Box*/
+            LV_GRID_CONTENT,  /*Title*/
+            5,                /*Separator*/
+            LV_GRID_CONTENT,  /*Box title*/
+            40,               /*Box*/
+            LV_GRID_CONTENT,  /*Box title*/
+            40,               /*Box*/
+            LV_GRID_CONTENT,  /*Box title*/
+            40,               /*Box*/
+            LV_GRID_CONTENT,  /*Box title*/
+            40, LV_GRID_TEMPLATE_LAST               /*Box*/
         };
 
         lv_obj_set_grid_dsc_array(panel2, grid_2_col_dsc, grid_2_row_dsc);
@@ -518,7 +537,6 @@ static void profile_create(lv_obj_t * parent)
         lv_obj_set_grid_cell(sw2, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 5, 1);
     }
 }
-
 
 static void analytics_create(lv_obj_t * parent)
 {
@@ -638,7 +656,7 @@ static void analytics_create(lv_obj_t * parent)
     lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
 
     lv_meter_scale_t * scale;
-    lv_meter_indicator_t *indic;
+    lv_meter_indicator_t * indic;
     meter1 = create_meter_box(parent, "Monthly Target", "Revenue: 63%", "Sales: 44%", "Costs: 58%");
     lv_obj_add_flag(lv_obj_get_parent(meter1), LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
     scale = lv_meter_add_scale(meter1);
@@ -691,7 +709,7 @@ static void analytics_create(lv_obj_t * parent)
     lv_meter_set_indicator_start_value(meter2, meter2_indic[2], 70);
     lv_meter_set_indicator_end_value(meter2, meter2_indic[2], 99);
 
-    lv_timer_create(meter2_timer_cb, 100, meter2_indic);
+    meter2_timer = lv_timer_create(meter2_timer_cb, 100, meter2_indic);
 
     meter3 = create_meter_box(parent, "Network Speed", "Low speed", "Normal Speed", "High Speed");
     if(disp_size < DISP_LARGE) lv_obj_add_flag(lv_obj_get_parent(meter3), LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
@@ -715,7 +733,8 @@ static void analytics_create(lv_obj_t * parent)
     lv_meter_set_indicator_start_value(meter3, indic, 0);
     lv_meter_set_indicator_end_value(meter3, indic, 20);
 
-    indic = lv_meter_add_scale_lines(meter3, scale, lv_palette_darken(LV_PALETTE_RED, 3), lv_palette_darken(LV_PALETTE_RED, 3), true, 0);
+    indic = lv_meter_add_scale_lines(meter3, scale, lv_palette_darken(LV_PALETTE_RED, 3), lv_palette_darken(LV_PALETTE_RED,
+                                                                                                            3), true, 0);
     lv_meter_set_indicator_start_value(meter3, indic, 0);
     lv_meter_set_indicator_end_value(meter3, indic, 20);
 
@@ -723,7 +742,8 @@ static void analytics_create(lv_obj_t * parent)
     lv_meter_set_indicator_start_value(meter3, indic, 20);
     lv_meter_set_indicator_end_value(meter3, indic, 40);
 
-    indic = lv_meter_add_scale_lines(meter3, scale, lv_palette_darken(LV_PALETTE_BLUE, 3), lv_palette_darken(LV_PALETTE_BLUE, 3), true, 0);
+    indic = lv_meter_add_scale_lines(meter3, scale, lv_palette_darken(LV_PALETTE_BLUE, 3),
+                                     lv_palette_darken(LV_PALETTE_BLUE, 3), true, 0);
     lv_meter_set_indicator_start_value(meter3, indic, 20);
     lv_meter_set_indicator_end_value(meter3, indic, 40);
 
@@ -731,7 +751,8 @@ static void analytics_create(lv_obj_t * parent)
     lv_meter_set_indicator_start_value(meter3, indic, 40);
     lv_meter_set_indicator_end_value(meter3, indic, 60);
 
-    indic = lv_meter_add_scale_lines(meter3, scale, lv_palette_darken(LV_PALETTE_GREEN, 3), lv_palette_darken(LV_PALETTE_GREEN, 3), true, 0);
+    indic = lv_meter_add_scale_lines(meter3, scale, lv_palette_darken(LV_PALETTE_GREEN, 3),
+                                     lv_palette_darken(LV_PALETTE_GREEN, 3), true, 0);
     lv_meter_set_indicator_start_value(meter3, indic, 40);
     lv_meter_set_indicator_end_value(meter3, indic, 60);
 
@@ -758,7 +779,8 @@ static void analytics_create(lv_obj_t * parent)
         lv_obj_set_size(meter1, 200, 200);
         lv_obj_set_size(meter2, 200, 200);
         lv_obj_set_size(meter3, 200, 200);
-    } else {
+    }
+    else {
         lv_coord_t meter_w = lv_obj_get_width(meter1);
         lv_obj_set_height(meter1, meter_w);
         lv_obj_set_height(meter2, meter_w);
@@ -829,20 +851,20 @@ void shop_create(lv_obj_t * parent)
         lv_obj_set_size(chart3, lv_pct(100), lv_pct(100));
         lv_obj_set_style_pad_column(chart3, LV_DPX(30), 0);
 
-
         lv_obj_set_grid_dsc_array(panel1, grid1_col_dsc, grid1_row_dsc);
         lv_obj_set_grid_cell(title, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 0, 1);
         lv_obj_set_grid_cell(date, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 1, 1);
         lv_obj_set_grid_cell(amount, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 3, 1);
         lv_obj_set_grid_cell(hint, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 4, 1);
         lv_obj_set_grid_cell(chart3, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 0, 5);
-    } else if(disp_size == DISP_MEDIUM) {
+    }
+    else if(disp_size == DISP_MEDIUM) {
         static lv_coord_t grid1_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static lv_coord_t grid1_row_dsc[] = {
-                LV_GRID_CONTENT,  /*Title + Date*/
-                LV_GRID_CONTENT,  /*Amount + Hint*/
-                200,              /*Chart*/
-                LV_GRID_TEMPLATE_LAST
+            LV_GRID_CONTENT,  /*Title + Date*/
+            LV_GRID_CONTENT,  /*Amount + Hint*/
+            200,              /*Chart*/
+            LV_GRID_TEMPLATE_LAST
         };
 
         lv_obj_update_layout(panel1);
@@ -855,15 +877,16 @@ void shop_create(lv_obj_t * parent)
         lv_obj_set_grid_cell(amount, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_CENTER, 1, 1);
         lv_obj_set_grid_cell(hint, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_CENTER, 1, 1);
         lv_obj_set_grid_cell(chart3, LV_GRID_ALIGN_END, 0, 2, LV_GRID_ALIGN_STRETCH, 2, 1);
-    } else if(disp_size == DISP_SMALL) {
+    }
+    else if(disp_size == DISP_SMALL) {
         static lv_coord_t grid1_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static lv_coord_t grid1_row_dsc[] = {
-                LV_GRID_CONTENT,  /*Title*/
-                LV_GRID_CONTENT,  /*Date*/
-                LV_GRID_CONTENT,  /*Amount*/
-                LV_GRID_CONTENT,  /*Hint*/
-                LV_GRID_CONTENT,  /*Chart*/
-                LV_GRID_TEMPLATE_LAST
+            LV_GRID_CONTENT,  /*Title*/
+            LV_GRID_CONTENT,  /*Date*/
+            LV_GRID_CONTENT,  /*Amount*/
+            LV_GRID_CONTENT,  /*Hint*/
+            LV_GRID_CONTENT,  /*Chart*/
+            LV_GRID_TEMPLATE_LAST
         };
 
         lv_obj_set_width(chart3, LV_PCT(95));
@@ -883,7 +906,8 @@ void shop_create(lv_obj_t * parent)
     if(disp_size == DISP_SMALL) {
         lv_obj_add_flag(list, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
         lv_obj_set_height(list, LV_PCT(100));
-    } else {
+    }
+    else {
         lv_obj_set_height(list, LV_PCT(100));
         lv_obj_set_style_max_height(list, 300, 0);
     }
@@ -907,7 +931,8 @@ void shop_create(lv_obj_t * parent)
     if(disp_size == DISP_SMALL) {
         lv_obj_add_flag(notifications, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
         lv_obj_set_height(notifications, LV_PCT(100));
-    } else  {
+    }
+    else  {
         lv_obj_set_height(notifications, LV_PCT(100));
         lv_obj_set_style_max_height(notifications, 300, 0);
     }
@@ -941,14 +966,14 @@ void shop_create(lv_obj_t * parent)
     cb = lv_checkbox_create(notifications);
     lv_checkbox_set_text(cb, "Out of stock");
 
-
 }
 
 static void color_changer_create(lv_obj_t * parent)
 {
     static lv_palette_t palette[] = {
-            LV_PALETTE_BLUE, LV_PALETTE_GREEN, LV_PALETTE_BLUE_GREY,  LV_PALETTE_ORANGE,
-            LV_PALETTE_RED, LV_PALETTE_PURPLE, LV_PALETTE_TEAL, _LV_PALETTE_LAST };
+        LV_PALETTE_BLUE, LV_PALETTE_GREEN, LV_PALETTE_BLUE_GREY,  LV_PALETTE_ORANGE,
+        LV_PALETTE_RED, LV_PALETTE_PURPLE, LV_PALETTE_TEAL, _LV_PALETTE_LAST
+    };
 
     lv_obj_t * color_cont = lv_obj_create(parent);
     lv_obj_remove_style_all(color_cont);
@@ -987,12 +1012,13 @@ static void color_changer_create(lv_obj_t * parent)
     lv_obj_set_style_bg_img_src(btn, LV_SYMBOL_TINT, 0);
 
     if(disp_size == DISP_SMALL) {
-         lv_obj_set_size(btn, LV_DPX(42), LV_DPX(42));
-         lv_obj_align(btn, LV_ALIGN_BOTTOM_RIGHT, -LV_DPX(15), -LV_DPX(15));
-     } else {
-         lv_obj_set_size(btn, LV_DPX(50), LV_DPX(50));
-         lv_obj_align(btn, LV_ALIGN_BOTTOM_RIGHT, -LV_DPX(15), -LV_DPX(15));
-     }
+        lv_obj_set_size(btn, LV_DPX(42), LV_DPX(42));
+        lv_obj_align(btn, LV_ALIGN_BOTTOM_RIGHT, -LV_DPX(15), -LV_DPX(15));
+    }
+    else {
+        lv_obj_set_size(btn, LV_DPX(50), LV_DPX(50));
+        lv_obj_align(btn, LV_ALIGN_BOTTOM_RIGHT, -LV_DPX(15), -LV_DPX(15));
+    }
 }
 
 static void color_changer_anim_cb(void * var, int32_t v)
@@ -1005,7 +1031,8 @@ static void color_changer_anim_cb(void * var, int32_t v)
         w = lv_map(v, 0, 256, LV_DPX(52), max_w);
         lv_obj_set_width(obj, w);
         lv_obj_align(obj, LV_ALIGN_BOTTOM_RIGHT, - LV_DPX(10),  - LV_DPX(10));
-    } else {
+    }
+    else {
         w = lv_map(v, 0, 256, LV_DPX(60), max_w);
         lv_obj_set_width(obj, w);
         lv_obj_align(obj, LV_ALIGN_BOTTOM_RIGHT, - LV_DPX(10),  - LV_DPX(10));
@@ -1020,7 +1047,7 @@ static void color_changer_anim_cb(void * var, int32_t v)
 
 }
 
-static void color_changer_event_cb(lv_event_t *e)
+static void color_changer_event_cb(lv_event_t * e)
 {
     if(lv_event_get_code(e) == LV_EVENT_CLICKED) {
         lv_obj_t * color_cont = lv_event_get_user_data(e);
@@ -1032,7 +1059,8 @@ static void color_changer_event_cb(lv_event_t *e)
             lv_anim_set_values(&a, 0, 256);
             lv_anim_set_time(&a, 200);
             lv_anim_start(&a);
-        } else {
+        }
+        else {
             lv_anim_t a;
             lv_anim_init(&a);
             lv_anim_set_var(&a, color_cont);
@@ -1064,9 +1092,10 @@ static void color_event_cb(lv_event_t * e)
         lv_palette_t * palette_primary = lv_event_get_user_data(e);
         lv_palette_t palette_secondary = (*palette_primary) + 3; /*Use another palette as secondary*/
         if(palette_secondary >= _LV_PALETTE_LAST) palette_secondary = 0;
-
-        lv_theme_default_init(NULL, lv_palette_main(*palette_primary), lv_palette_main(palette_secondary), LV_THEME_DEFAULT_DARK, font_normal);
-
+#if LV_USE_THEME_DEFAULT
+        lv_theme_default_init(NULL, lv_palette_main(*palette_primary), lv_palette_main(palette_secondary),
+                              LV_THEME_DEFAULT_DARK, font_normal);
+#endif
         lv_color_t color = lv_palette_main(*palette_primary);
         lv_style_set_text_color(&style_icon, color);
         lv_chart_set_series_color(chart1, ser1, color);
@@ -1074,7 +1103,8 @@ static void color_event_cb(lv_event_t * e)
     }
 }
 
-static lv_obj_t * create_meter_box(lv_obj_t * parent, const char * title, const char * text1, const char * text2, const char * text3)
+static lv_obj_t * create_meter_box(lv_obj_t * parent, const char * title, const char * text1, const char * text2,
+                                   const char * text3)
 {
     lv_obj_t * cont = lv_obj_create(parent);
     lv_obj_set_height(cont, LV_SIZE_CONTENT);
@@ -1114,7 +1144,7 @@ static lv_obj_t * create_meter_box(lv_obj_t * parent, const char * title, const 
     lv_label_set_text(label3, text3);
 
     if(disp_size == DISP_MEDIUM) {
-        static lv_coord_t grid_col_dsc[] = {LV_GRID_CONTENT, LV_GRID_FR(1), LV_GRID_CONTENT,LV_GRID_FR(8), LV_GRID_TEMPLATE_LAST};
+        static lv_coord_t grid_col_dsc[] = {LV_GRID_CONTENT, LV_GRID_FR(1), LV_GRID_CONTENT, LV_GRID_FR(8), LV_GRID_TEMPLATE_LAST};
         static lv_coord_t grid_row_dsc[] = {LV_GRID_CONTENT, LV_GRID_FR(1), LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 
         lv_obj_set_grid_dsc_array(cont, grid_col_dsc, grid_row_dsc);
@@ -1141,12 +1171,12 @@ static lv_obj_t * create_meter_box(lv_obj_t * parent, const char * title, const 
         lv_obj_set_grid_cell(label3, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_START, 4, 1);
     }
 
-
     return meter;
 
 }
 
-static lv_obj_t * create_shop_item(lv_obj_t * parent, const void * img_src, const char * name, const char * category, const char * price)
+static lv_obj_t * create_shop_item(lv_obj_t * parent, const void * img_src, const char * name, const char * category,
+                                   const char * price)
 {
     static lv_coord_t grid_col_dsc[] = {LV_GRID_CONTENT, 5, LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     static lv_coord_t grid_row_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
@@ -1257,9 +1287,10 @@ static void slider_event_cb(lv_event_t * e)
     lv_obj_t * obj = lv_event_get_target(e);
 
     if(code == LV_EVENT_REFR_EXT_DRAW_SIZE) {
-        lv_coord_t *s = lv_event_get_param(e);
+        lv_coord_t * s = lv_event_get_param(e);
         *s = LV_MAX(*s, 60);
-    } else if(code == LV_EVENT_DRAW_PART_END) {
+    }
+    else if(code == LV_EVENT_DRAW_PART_END) {
         lv_obj_draw_part_dsc_t * dsc = lv_event_get_param(e);
         if(dsc->part == LV_PART_KNOB && lv_obj_has_state(obj, LV_STATE_PRESSED)) {
             char buf[8];
@@ -1310,7 +1341,8 @@ static void chart_event_cb(lv_event_t * e)
             if(lv_chart_get_type(obj) == LV_CHART_TYPE_BAR) {
                 const char * month[] = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"};
                 lv_snprintf(dsc->text, dsc->text_length, "%s", month[dsc->value]);
-            } else {
+            }
+            else {
                 const char * month[] = {"Jan", "Febr", "March", "Apr", "May", "Jun", "July", "Aug", "Sept", "Oct", "Nov", "Dec"};
                 lv_snprintf(dsc->text, dsc->text_length, "%s", month[dsc->value]);
             }
@@ -1322,13 +1354,15 @@ static void chart_event_cb(lv_event_t * e)
             /*Add  a line mask that keeps the area below the line*/
             if(dsc->p1 && dsc->p2) {
                 lv_draw_mask_line_param_t line_mask_param;
-                lv_draw_mask_line_points_init(&line_mask_param, dsc->p1->x, dsc->p1->y, dsc->p2->x, dsc->p2->y, LV_DRAW_MASK_LINE_SIDE_BOTTOM);
+                lv_draw_mask_line_points_init(&line_mask_param, dsc->p1->x, dsc->p1->y, dsc->p2->x, dsc->p2->y,
+                                              LV_DRAW_MASK_LINE_SIDE_BOTTOM);
                 int16_t line_mask_id = lv_draw_mask_add(&line_mask_param, NULL);
 
                 /*Add a fade effect: transparent bottom covering top*/
                 lv_coord_t h = lv_obj_get_height(obj);
                 lv_draw_mask_fade_param_t fade_mask_param;
-                lv_draw_mask_fade_init(&fade_mask_param, &obj->coords, LV_OPA_COVER, obj->coords.y1 + h / 8, LV_OPA_TRANSP, obj->coords.y2);
+                lv_draw_mask_fade_init(&fade_mask_param, &obj->coords, LV_OPA_COVER, obj->coords.y1 + h / 8, LV_OPA_TRANSP,
+                                       obj->coords.y2);
                 int16_t fade_mask_id = lv_draw_mask_add(&fade_mask_param, NULL);
 
                 /*Draw a rectangle that will be affected by the mask*/
@@ -1354,14 +1388,14 @@ static void chart_event_cb(lv_event_t * e)
             }
 #endif
 
-
             const lv_chart_series_t * ser = dsc->sub_part_ptr;
 
             if(lv_chart_get_pressed_point(obj) == dsc->id) {
                 if(lv_chart_get_type(obj) == LV_CHART_TYPE_LINE) {
                     dsc->rect_dsc->outline_color = lv_color_white();
                     dsc->rect_dsc->outline_width = 2;
-                } else {
+                }
+                else {
                     dsc->rect_dsc->shadow_color = ser->color;
                     dsc->rect_dsc->shadow_width = 15;
                     dsc->rect_dsc->shadow_spread = 0;
@@ -1380,11 +1414,13 @@ static void chart_event_cb(lv_event_t * e)
                     if(ser == lv_chart_get_series_next(obj, NULL)) {
                         txt_area.x1 = dsc->draw_area->x1 + lv_area_get_width(dsc->draw_area) / 2;
                         txt_area.x2 = txt_area.x1 + text_size.x;
-                    } else {
+                    }
+                    else {
                         txt_area.x2 = dsc->draw_area->x1 + lv_area_get_width(dsc->draw_area) / 2;
                         txt_area.x1 = txt_area.x2 - text_size.x;
                     }
-                } else {
+                }
+                else {
                     txt_area.x1 = dsc->draw_area->x1 + lv_area_get_width(dsc->draw_area) / 2 - text_size.x / 2;
                     txt_area.x2 = txt_area.x1 + text_size.x;
                     txt_area.y2 = dsc->draw_area->y1 - LV_DPX(15);
@@ -1408,14 +1444,14 @@ static void chart_event_cb(lv_event_t * e)
                 label_dsc.color = lv_color_white();
                 label_dsc.font = font_normal;
                 lv_draw_label(dsc->draw_ctx, &label_dsc, &txt_area,  buf, NULL);
-            } else {
+            }
+            else {
                 dsc->rect_dsc->outline_width = 0;
                 dsc->rect_dsc->shadow_width = 0;
             }
         }
     }
 }
-
 
 static void shop_chart_event_cb(lv_event_t * e)
 {
@@ -1455,19 +1491,18 @@ static void shop_chart_event_cb(lv_event_t * e)
             lv_draw_rect(dsc->draw_ctx, &draw_rect_dsc, &a);
 
             a.y1 = a.y2 - 4;                                    /*-4 to overlap the radius*/
-            a.y2 = a.y1 +  (clothes[dsc->id] * h) / 100;
+            a.y2 = a.y1 + (clothes[dsc->id] * h) / 100;
             draw_rect_dsc.bg_color = lv_palette_main(LV_PALETTE_BLUE);
             draw_rect_dsc.radius = 0;
-            lv_draw_rect( dsc->draw_ctx, &draw_rect_dsc, &a);
+            lv_draw_rect(dsc->draw_ctx, &draw_rect_dsc, &a);
 
             a.y1 = a.y2;
             a.y2 = a.y1 + (services[dsc->id] * h) / 100;
             draw_rect_dsc.bg_color = lv_palette_main(LV_PALETTE_GREEN);
-            lv_draw_rect( dsc->draw_ctx, &draw_rect_dsc, &a);
+            lv_draw_rect(dsc->draw_ctx, &draw_rect_dsc, &a);
         }
     }
 }
-
 
 static void meter1_indic1_anim_cb(void * var, int32_t v)
 {
@@ -1505,11 +1540,11 @@ static void meter2_timer_cb(lv_timer_t * timer)
     static bool down2 = false;
     static bool down3 = false;
 
-
     if(down1) {
         session_desktop -= 137;
         if(session_desktop < 1400) down1 = false;
-    } else {
+    }
+    else {
         session_desktop += 116;
         if(session_desktop > 4500) down1 = true;
     }
@@ -1517,7 +1552,8 @@ static void meter2_timer_cb(lv_timer_t * timer)
     if(down2) {
         session_tablet -= 3;
         if(session_tablet < 1400) down2 = false;
-    } else {
+    }
+    else {
         session_tablet += 9;
         if(session_tablet > 4500) down2 = true;
     }
@@ -1525,7 +1561,8 @@ static void meter2_timer_cb(lv_timer_t * timer)
     if(down3) {
         session_mobile -= 57;
         if(session_mobile < 1400) down3 = false;
-    } else {
+    }
+    else {
         session_mobile += 76;
         if(session_mobile > 4500) down3 = true;
     }
