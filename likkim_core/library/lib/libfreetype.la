@@ -38,4 +38,4 @@ dlopen=''
 dlpreopen=''
 
 # Directory that this library needs to be installed in:
-libdir='/home/parallels/freetype-2.13.3/library/lib'
+libdir='/home/ray/freetype-2.13.3/library/lib'

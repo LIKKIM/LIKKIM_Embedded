@@ -46,8 +46,8 @@ vpath %.S $(sort $(dir $(ASRCS)))
 ## MAINOBJ -> OBJFILES
 all:
 	@mkdir -p $(BUILD_DIR)
-	make -C likkim_algo/ LIKKIM_ALL
-	make LVGL_ALL -j4
+	make -C likkim_algo/ LIKKIM_ALL -j32
+	make LVGL_ALL -j32
 
 LVGL_ALL: $(AOBJS) $(COBJS) $(MAINOBJ)
 	$(CC) -o $(BUILD_DIR)/$(BIN) $(MAINOBJ) $(AOBJS) $(COBJS) $(LDFLAGS)
