@@ -9,7 +9,7 @@
 
 
 static startup_invalid_recovery_t* p_startup_invalid_recovery = NULL;
-extern void startup_import_wallet_start(void);
+extern void startup_ready_check_start(void);
 
 
 static void finger_start_try_again_handler(lv_event_t* e)
@@ -19,7 +19,7 @@ static void finger_start_try_again_handler(lv_event_t* e)
     if (LV_EVENT_SHORT_CLICKED == event)
     {
 	    startup_invalid_recovery_stop();
-	    startup_import_wallet_start();
+	    startup_ready_check_start();
     }
 }
 

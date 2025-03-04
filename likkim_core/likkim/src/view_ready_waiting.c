@@ -41,7 +41,8 @@ static void timer_cb(lv_timer_t * tmr)
         {
             App_Startup_Flag =APP_STARTUP_IMPORT_WALLET;
             view_ready_waiting_stop();
-            startup_ready_check_start();
+            startup_invalid_recovery_start();
+            
 
         }
 

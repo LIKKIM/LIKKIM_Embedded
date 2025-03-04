@@ -168,18 +168,15 @@ void *thread_func2(void *arg) {
             walletCreate = 0;
             walletInit(32, "");
         }
-        if (wallet_Input_get() == 1) {  // 创建导入钱包标志位
-            wallet_Input_word(0);
-            if (import_wallet_init() == 1)
-                printf("import_wallet_init:succeed\r\n");
-            else
-                printf("import_wallet_init:fail\r\n");
-
-            // startup_import_abort_start();
-
-        } else if (wallet_Input_get() == 3) {
-            wallet_Input_word(0);
-            // printf("p_startup_import_word->word:%s\r\n",p_startup_import_word->word);
+        if(wallet_Input_get()==1){        //创建导入钱包标志位 
+            if(import_wallet_init()==1){
+                gui_data_sueess(1);/*助记词已经创建成功*/
+                wallet_Input_word(3);
+            }      
+            else{
+                gui_data_sueess(0);/*助记词已经创建fail*/
+                wallet_Input_word(3);
+            }
         }
         if (AddressFlag == 1)  // 显示地址
         {
