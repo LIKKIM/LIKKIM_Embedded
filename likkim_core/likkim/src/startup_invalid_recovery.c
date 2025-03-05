@@ -32,7 +32,7 @@ static void startup_invalid_recovery_bg_cont(lv_obj_t* parent)
     lv_obj_t* title = lv_label_create(parent);
     lv_obj_set_style_text_color(title, lv_color_hex(0xffffff), 0);
     lv_label_set_long_mode(title, LV_LABEL_LONG_WRAP);
-    lv_obj_set_width(title, 296);
+    lv_obj_set_width(title, 400);
     lv_obj_set_pos(title, 90, 60);
     set_language_string(title, 40, language_table_invalid_recovery_phrase);
 
