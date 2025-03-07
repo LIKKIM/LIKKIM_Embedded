@@ -11,6 +11,7 @@
 extern void startup_quick_start_start(void);
 extern void startup_recovery_start(void);
 extern void view_ready_waiting_start(void);
+extern uint8_t gui_algo_data_get_pagelocationsave(char *state);
 
 uint8_t walletCreate =0;
 
@@ -45,7 +46,7 @@ static void startup_btn_event_handler(lv_event_t* e)
         walletCreate =ret;
 
         startup_ready_check_stop();
-        view_ready_waiting_start();
+        gui_algo_data_get_pagelocationsave("start");;
 
             
         
