@@ -49,7 +49,6 @@ extern WalletInfo *infoWallet;
 // variable
 pthread_mutex_t lvgl_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-
 static void clear_fb(void) {
     lv_area_t area;
     lv_color_t buf[DISP_BUF_SIZE];
@@ -118,7 +117,33 @@ void *thread_ui(void *arg) {
     indev_drv_1.read_cb = evdev_read;
     lv_indev_t *mouse_indev = lv_indev_drv_register(&indev_drv_1);
 
+    /////////////////////////////////////////////////////////////////////////////////////////
+#if 0   //for test
+    /*Create a font*/
+    static lv_ft_info_t info;
+    /*FreeType uses C standard file system, so no driver letter is required.*/
+    info.name = "./NotoSansSC.ttf";
+    info.weight = 24;
+    info.style = FT_FONT_STYLE_BOLD;
+    info.mem = NULL;
+    if(!lv_ft_font_init(&info)) {
+        LV_LOG_ERROR("create failed.");
+    }
+    /*Create style with the new font*/
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_text_font(&style, info.font);
+    lv_style_set_text_align(&style, LV_TEXT_ALIGN_CENTER);
 
+    /*Create a label with the new style*/
+    lv_obj_t * label = lv_label_create(lv_layer_top());
+    lv_obj_add_style(label, &style, 0);
+    lv_label_set_text(label, "English\n你好世界");
+    lv_obj_add_style(label, &style, 0);
+    lv_obj_set_style_text_color(label, lv_color_white(), 0);
+    lv_obj_align(label, LV_ALIGN_CENTER, -100, -231);
+#endif
+    /////////////////////////////////////////////////////////////////////////////////////////
     gui_comm_init();
     gui_data_init();
 

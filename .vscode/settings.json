@@ -1,6 +1,7 @@
 {
     "cmake.ignoreCMakeListsMissing": true,
     "files.associations": {
+        "Kconfig": "plaintext",
         "gui_comm.h": "c",
         "gui_data_comm.h": "c",
         "menu_main.h": "c",
@@ -8,6 +9,7 @@
         "settings_main.h": "c",
         "fbdev.h": "c",
         "lv_examples.h": "c",
-        "lv_freetype.h": "c"
+        "lv_freetype.h": "c",
+        "lvgl.h": "c"
     }
 }

@@ -2776,6 +2776,9 @@ const char* language_table_nft_gallery_infomation[] = {
 	"খুলুন LIKKIM অ্যাপ, এই হার্ডওয়্যার ওয়ালেটের সাথে সংযুক্ত NFT খুঁজুন এবং 'কোলেকশনে যুক্ত করুন' বোতামটি টিপুন।"
 };
 
+//use for tools
+const char* regular_char = "!#$&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[^_`abcdefghijklmnopqrstuvwxyz{|}~";
+
 void set_language_string(lv_obj_t *label, uint8_t font_size, const char** str_table)
 {
 	language_type_t type = gui_data_get_language_type();
