@@ -7,7 +7,7 @@
 #include "gui_data_comm.h"
 
 extern void view_addr_qrcode_start(void);
-
+extern void menu_main_start(void);
 static void view_text(lv_obj_t* parent);
 static void view_qrcode(lv_obj_t* parent);
 
@@ -22,7 +22,8 @@ static void done_cb(lv_event_t* e)
     {
     	printf("%s\n", __func__);
     	view_addr_main_stop();
-         gui_algo_data_get_pagelocationsave("start");
+        //  gui_algo_data_get_pagelocationsave("start");
+		menu_main_start();
 
     }
 }
@@ -95,7 +96,7 @@ static void view_text(lv_obj_t* parent)
 	    lv_obj_set_style_text_color(label_path, lv_color_hex(0xffffff), 0);
 	    lv_label_set_long_mode(label_path, LV_LABEL_LONG_WRAP);
 	    lv_obj_set_width(label_path, 320);
-	    lv_obj_set_pos(label_path, 40, 20);\
+	    lv_obj_set_pos(label_path, 40, 20);
 		set_language_string(label_path, 24, language_table_path);
 		lv_obj_update_layout(label_path);
 		
