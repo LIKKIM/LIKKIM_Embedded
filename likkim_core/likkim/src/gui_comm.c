@@ -297,7 +297,6 @@ lv_obj_t* gui_comm_draw_title(lv_obj_t *parent, const char **str_tab, lv_event_c
     return title;
 }
 
-
 lv_obj_t *gui_comm_draw_obj(lv_obj_t *parent, lv_coord_t x, lv_coord_t y, lv_coord_t w, lv_coord_t h, int32_t radius, uint32_t color_default, uint32_t color_pressed)
 {
     lv_obj_t* obj = lv_obj_create(parent);
