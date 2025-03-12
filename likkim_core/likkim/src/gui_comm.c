@@ -5,7 +5,7 @@
 #include "gui_comm.h"
 #include "gui_data_comm.h"
 
-
+// keyboard
 static gui_comm_imgbtn_desc2_t gui_comm_keypad_table[] =
 {
 	{"back", 22, 710},
@@ -38,7 +38,7 @@ static gui_comm_imgbtn_desc2_t gui_comm_keypad_table[] =
 	{"m", 352, 710},
 };
 
-
+// number keyboard
 static gui_comm_imgbtn_desc2_t gui_imgbtn_num_table[] =
 {
     {"1", 40, 420},
