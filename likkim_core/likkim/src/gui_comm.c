@@ -154,6 +154,7 @@ lv_obj_t* gui_comm_draw_keypad_num(lv_obj_t* parent, lv_event_cb_t num_cb, lv_ev
 	lv_obj_set_style_bg_color(img_btn_ok, lv_color_hex(0x555555), LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(img_btn_ok, LV_OPA_COVER, LV_PART_MAIN);
 	lv_obj_set_style_radius(img_btn_ok, 15, 0);
+    // Move the 'img_btn_ok' button to the position (312, 684).
 	lv_obj_set_pos(img_btn_ok, 312, 684);
 	lv_obj_add_event_cb(img_btn_ok, ok_cb, LV_EVENT_SHORT_CLICKED, NULL);
 	lv_obj_add_flag(img_btn_ok, LV_OBJ_FLAG_CLICKABLE);
