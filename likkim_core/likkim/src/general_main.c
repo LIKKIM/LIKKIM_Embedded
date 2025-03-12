@@ -1,13 +1,13 @@
 ﻿/*********************
  *      INCLUDES
  *********************/
-
+// Include headers for using other modules in the project
 #include "general_main.h"
 #include "gui_comm.h"
 #include "gui_data_comm.h"
 #include "gui_language_comm.h"
 
-
+// Declare external functions from other parts of the project
 extern void menu_main_start(void);
 extern void general_lock_start(void);
 extern void general_shutdown_start(void);
@@ -15,12 +15,11 @@ extern void general_homescreen_start(void);
 extern void startup_language_start(app_index_t app_index);
 extern void startup_screen_start(app_index_t app_index);
 
-
-
+// Static pointer to store main interface data
 static general_main_t* p_general_main = NULL;
 
-static gui_comm_imgbtn_desc_t gui_comm_imgbtn_num_table[] =
-{
+// Static array to define buttons with their labels and positions
+static gui_comm_imgbtn_desc_t gui_comm_imgbtn_num_table[] = {
     {language_table_auto_lock, 40, 128},
     {language_table_language, 40, 188},
     {language_table_shutdown, 40, 248},
@@ -28,6 +27,7 @@ static gui_comm_imgbtn_desc_t gui_comm_imgbtn_num_table[] =
     {language_table_lock_screen, 40, 368},
 };
 
+// Callback function for title click events
 static void title_cb(lv_event_t* e)
 {
     lv_event_code_t event = lv_event_get_code(e);
