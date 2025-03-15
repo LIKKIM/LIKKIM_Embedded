@@ -17,6 +17,7 @@
 #include "gui_comm.h"
 #include "gui_data_comm.h"
 #include "lv_drivers/display/fbdev.h"
+#include "lv_drivers/display/drm.h"
 #include "lv_drivers/indev/evdev.h"
 #include "lvgl/lvgl.h"
 #include "lvgl/examples/lv_examples.h"
@@ -33,8 +34,8 @@
 #include "usart1.h"
 
 // 宏定义
-#define DISP_WIDTH      800
-#define DISP_HEIGHT     480
+#define DISP_WIDTH      480
+#define DISP_HEIGHT     800
 #define DISP_BUF_SIZE   (DISP_WIDTH * DISP_HEIGHT)
 //  const char *path = "/sys/class/backlight/panel-backlight/bl_power";
 #define BUTTON_PATH "/dev/input/event1"  // 按键事件设备文件路径
@@ -59,7 +60,7 @@ static void clear_fb(void) {
     area.y1 = 0;
     area.x2 = DISP_WIDTH;
     area.y2 = DISP_HEIGHT;
-    fbdev_flush(NULL, &area, buf);
+    //fbdev_flush(NULL, &area, buf);
 }
 
 // signal handler
@@ -88,7 +89,8 @@ void *thread_ui(void *arg) {
     lv_init();
 
     /*Linux frame buffer device init*/
-    fbdev_init();
+    //fbdev_init();
+    drm_init();
 
     /*A small buffer for LittlevGL to draw the screen's content*/
     static lv_color_t buf[DISP_BUF_SIZE];
@@ -101,11 +103,11 @@ void *thread_ui(void *arg) {
     static lv_disp_drv_t disp_drv;
     lv_disp_drv_init(&disp_drv);
     disp_drv.draw_buf = &disp_buf;
-    disp_drv.flush_cb = fbdev_flush;
-    disp_drv.hor_res = 800;
-    disp_drv.ver_res = 480;
-    disp_drv.rotated = LV_DISP_ROT_90;
-    disp_drv.sw_rotate = 1;
+    disp_drv.flush_cb = drm_flush;
+    disp_drv.hor_res = DISP_WIDTH;
+    disp_drv.ver_res = DISP_HEIGHT;
+//    disp_drv.rotated = LV_DISP_ROT_90;
+//    disp_drv.sw_rotate = 1;
     lv_disp_drv_register(&disp_drv);
 
     evdev_init();
@@ -287,7 +289,7 @@ int main() {
 
     signal(SIGINT, handle_sigint);
     signal(SIGSEGV, handle_sigsegv);
-
+/*
     // 打开串口设备
     fd = open(SERIAL_PORT, O_RDWR | O_NOCTTY | O_NDELAY);
     if (fd == -1) {
@@ -300,6 +302,7 @@ int main() {
         close(fd);
         return -1;
     }
+*/
     // 创建线程 1
     if (create_thread(&thread1, thread_ui, "Failed to create thread 1") <
         0) {

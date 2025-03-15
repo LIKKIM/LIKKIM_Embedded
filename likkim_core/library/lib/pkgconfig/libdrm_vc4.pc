@@ -1,0 +1,9 @@
+prefix=/home/libdrm-2.4.89/library
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libdrm_vc4
+Description: Userspace interface to vc4 kernel DRM services
+Version: 2.4.89
+Requires.private: libdrm
